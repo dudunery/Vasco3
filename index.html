@@ -1,0 +1,1858 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="IA Vasco News — O primeiro portal com inteligência artificial do Vasco da Gama. Notícias, jogos, tabela, quiz e muito mais.">
+<title>IA Vasco News — Gigante da Colina</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ============================================================
+   IA VASCO NEWS — v6  |  Design: Editorial Luxury Dark
+   ============================================================ */
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  /* cores */
+  --ink:#0A0A0D;
+  --ink2:#111116;
+  --ink3:#18181F;
+  --ink4:#22222C;
+  --line:rgba(255,255,255,.07);
+  --line2:rgba(255,255,255,.13);
+  --gold:#C8A84B;
+  --gold2:#E4C76B;
+  --gold3:#F5E0A0;
+  --goldfade:rgba(200,168,75,.15);
+  --white:#F0EDE8;
+  --muted:#9B9790;
+  --subtle:#6A6762;
+  /* type */
+  --display:"Bebas Neue",sans-serif;
+  --serif:"Playfair Display",serif;
+  --sans:"DM Sans",sans-serif;
+  --mono:"DM Mono",monospace;
+  /* layout */
+  --max:1260px;
+  --r:8px;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--ink);color:var(--white);font-family:var(--sans);font-weight:400;line-height:1.6;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{font-family:var(--sans);cursor:pointer;border:none;background:none}
+img{display:block;max-width:100%}
+::-webkit-scrollbar{width:3px}
+::-webkit-scrollbar-track{background:var(--ink2)}
+::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+
+/* ── TICKER ─────────────────────────────────────────── */
+.ticker{background:var(--gold);height:32px;display:flex;align-items:center;overflow:hidden}
+.ticker-label{flex-shrink:0;padding:0 14px;font-family:var(--display);font-size:11px;letter-spacing:3px;color:#000;border-right:1px solid rgba(0,0,0,.2);height:100%;display:flex;align-items:center}
+.ticker-wrap{flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,black 40px,black calc(100% - 40px),transparent)}
+.ticker-inner{display:flex;gap:48px;white-space:nowrap;animation:tick 60s linear infinite}
+.ticker-inner:hover{animation-play-state:paused}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ti{font-family:var(--sans);font-size:11.5px;font-weight:500;color:#1a1a00;flex-shrink:0;display:flex;align-items:center;gap:6px}
+.ti b{font-weight:700}
+.ti::after{content:"◆";font-size:5px;opacity:.4;margin-left:12px}
+
+/* ── HEADER ──────────────────────────────────────────── */
+.site-header{position:sticky;top:0;z-index:400;background:rgba(10,10,13,.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.hdr{display:flex;align-items:center;justify-content:space-between;height:58px;gap:16px}
+.logo{display:flex;align-items:baseline;gap:8px;cursor:pointer;flex-shrink:0}
+.logo-main{font-family:var(--display);font-size:1.75rem;letter-spacing:4px;color:var(--white);line-height:1}
+.logo-main span{color:var(--gold)}
+.logo-sub{font-size:9px;letter-spacing:2px;color:var(--muted);text-transform:uppercase;font-weight:500}
+.nav{display:flex;align-items:center;gap:2px}
+.nav-btn{padding:6px 10px;font-size:11.5px;font-weight:500;letter-spacing:.5px;color:var(--muted);border-radius:5px;transition:color .15s,background .15s;cursor:pointer;white-space:nowrap}
+.nav-btn:hover,.nav-btn.on{color:var(--white);background:var(--ink3)}
+.nav-btn.on{color:var(--gold)}
+.hdr-r{display:flex;align-items:center;gap:10px;flex-shrink:0}
+.clock{text-align:right}
+.clock-t{display:block;font-family:var(--mono);font-size:13px;color:var(--white);letter-spacing:2px;line-height:1}
+.clock-d{display:block;font-size:9px;letter-spacing:1.5px;color:var(--muted);margin-top:1px;text-transform:uppercase}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:7px 15px;border-radius:5px;font-size:12px;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .2s;white-space:nowrap;border:none}
+.btn-gold{background:var(--gold);color:#000}
+.btn-gold:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--line2)}
+.btn-ghost:hover{color:var(--white);border-color:var(--gold)}
+
+/* ── AI STATUS BAR ───────────────────────────────────── */
+.ai-bar{background:linear-gradient(90deg,rgba(200,168,75,.08),rgba(200,168,75,.04),rgba(200,168,75,.08));border-bottom:1px solid rgba(200,168,75,.12);padding:7px 0}
+.ai-bar-inner{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ai-brand{display:flex;align-items:center;gap:8px}
+.ai-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);animation:pulse 2.5s ease-in-out infinite;flex-shrink:0}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.8)}}
+.ai-label{font-family:var(--display);font-size:11px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.ai-timer{font-family:var(--mono);font-size:10px;color:var(--muted)}
+.ai-timer span{color:var(--gold2)}
+
+/* ── PAGES ───────────────────────────────────────────── */
+.page{display:none;animation:fadein .28s ease both}
+.page.on{display:block}
+@keyframes fadein{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── HERO ────────────────────────────────────────────── */
+.hero{background:var(--ink2);border-bottom:1px solid var(--line);padding:36px 0 0;position:relative;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 75% 50%,rgba(200,168,75,.045) 0%,transparent 70%);pointer-events:none}
+.hero-grid{display:grid;grid-template-columns:1fr 340px;gap:40px;align-items:start}
+.hero-eyebrow{display:flex;align-items:center;gap:8px;margin-bottom:14px}
+.eyebrow-tag{font-family:var(--display);font-size:10px;letter-spacing:3px;color:var(--gold);text-transform:uppercase}
+.eyebrow-line{height:1px;width:40px;background:var(--gold);opacity:.4}
+.hero-title{font-family:var(--display);font-size:clamp(3.2rem,6vw,5.8rem);letter-spacing:2px;line-height:.92;color:var(--white);margin-bottom:16px}
+.hero-title em{font-style:normal;color:var(--gold)}
+.hero-lead{font-size:14px;color:var(--muted);line-height:1.75;max-width:420px;margin-bottom:24px}
+.hero-stats{display:flex;gap:24px;padding:16px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin-bottom:24px}
+.hs{text-align:center}
+.hs-val{font-family:var(--display);font-size:2rem;letter-spacing:1px;color:var(--white);display:block;line-height:1}
+.hs-val.g{color:var(--gold)}
+.hs-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);display:block;margin-top:3px}
+.hero-btns{display:flex;gap:8px;flex-wrap:wrap}
+
+/* match card */
+.mc{background:var(--ink3);border:1px solid var(--line2);border-radius:10px;overflow:hidden;position:relative}
+.mc-top{background:linear-gradient(135deg,var(--ink4),var(--ink3));padding:10px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.mc-comp{font-size:9.5px;letter-spacing:2px;text-transform:uppercase;color:var(--muted);font-weight:500}
+.mc-live{font-family:var(--mono);font-size:10px;color:var(--gold2);letter-spacing:1px}
+.mc-body{padding:20px 16px}
+.mc-vs{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px;margin-bottom:20px}
+.mc-team{text-align:center}
+.mc-badge{width:44px;height:44px;border-radius:50%;margin:0 auto 8px;background:var(--ink4);border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:11px;color:var(--muted)}
+.mc-badge.home{border-color:rgba(200,168,75,.4);color:var(--gold2)}
+.mc-name{font-family:var(--display);font-size:13px;letter-spacing:1px;color:var(--white)}
+.mc-info{font-size:9px;color:var(--subtle);margin-top:2px}
+.mc-sep{text-align:center}
+.mc-sep-x{font-family:var(--display);font-size:1.4rem;color:var(--subtle);display:block;line-height:1}
+.mc-sep-t{font-family:var(--mono);font-size:10px;color:var(--muted);display:block;margin-top:3px}
+.mc-cd{border-top:1px solid var(--line);padding:12px 16px;text-align:center}
+.mc-cd-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--subtle);display:block;margin-bottom:8px}
+.mc-cd-nums{display:flex;justify-content:center;align-items:baseline;gap:3px}
+.cdn{font-family:var(--display);font-size:2.2rem;color:var(--white);line-height:1;min-width:44px;text-align:center;display:inline-block}
+.cds{font-family:var(--display);font-size:1.6rem;color:var(--subtle);line-height:1;padding-bottom:2px}
+.cdu{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--subtle);display:block;margin-top:2px}
+.mc-where{background:var(--goldfade);border-top:1px solid rgba(200,168,75,.15);padding:8px 14px;font-size:10px;color:var(--gold2);text-align:center;letter-spacing:.5px}
+.mc-tv{background:var(--ink4);padding:8px 14px;font-size:10px;color:var(--muted);text-align:center}
+.mc-tv strong{color:var(--white)}
+.mc-ft{padding:10px;display:flex;gap:6px}
+/* gold shine */
+.mc::before{content:"";position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.6}
+
+/* hero nav bottom strip */
+.hero-strip{margin-top:28px;border-top:1px solid var(--line);display:flex;gap:0;overflow-x:auto}
+.hs-tab{flex:1;min-width:80px;padding:12px 8px;text-align:center;font-size:11px;font-weight:500;letter-spacing:.5px;color:var(--subtle);border-top:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.hs-tab:hover{color:var(--white)}
+.hs-tab.on{color:var(--gold);border-top-color:var(--gold)}
+
+/* ── NEWS SECTION ────────────────────────────────────── */
+.news-section{padding:32px 0}
+.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.section-title{font-family:var(--display);font-size:1.5rem;letter-spacing:2px;color:var(--white)}
+.section-meta{font-size:11px;color:var(--subtle)}
+
+/* news grid */
+.ng-featured{display:grid;grid-template-columns:2fr 1fr;gap:1px;background:var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:1px}
+.ng-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line)}
+.nc{background:var(--ink2);padding:18px;cursor:pointer;transition:background .18s;display:flex;flex-direction:column;gap:8px}
+.nc:hover{background:var(--ink3)}
+.nc-hero{padding:22px}
+.nc-sport{font-family:var(--display);font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:5px}
+.nc-title{font-family:var(--serif);font-size:1.05rem;font-weight:700;color:var(--white);line-height:1.25}
+.nc-hero .nc-title{font-size:1.3rem}
+.nc-sm .nc-title{font-size:.9rem}
+.nc-excerpt{font-size:12px;color:var(--muted);line-height:1.6;flex:1}
+.nc-sm .nc-excerpt{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.nc-foot{display:flex;align-items:center;justify-content:space-between;margin-top:auto;gap:8px}
+.nc-src{font-size:10px;color:var(--subtle);font-weight:500}
+.nc-src.tw{color:#60A5FA}
+.nc-src.ig{color:#F9A8D4}
+.nc-time{font-size:10px;color:var(--subtle)}
+.nc-tag{font-family:var(--display);font-size:8.5px;letter-spacing:1.5px;border-radius:3px;padding:2px 6px;background:var(--goldfade);color:var(--gold2);text-transform:uppercase}
+
+/* news list items */
+.nl-item{display:flex;align-items:flex-start;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);cursor:pointer;transition:opacity .15s}
+.nl-item:hover{opacity:.75}
+.nl-item:last-child{border-bottom:none}
+.nl-num{font-family:var(--display);font-size:.95rem;color:var(--subtle);min-width:20px;flex-shrink:0;margin-top:1px}
+.nl-body{flex:1}
+.nl-title{font-size:13px;font-weight:600;color:var(--white);line-height:1.3;margin-bottom:3px}
+.nl-meta{font-size:10px;color:var(--subtle)}
+
+/* ── SPORT FILTER ────────────────────────────────────── */
+.sport-filter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}
+.sf{padding:5px 12px;border-radius:20px;font-size:11px;font-weight:500;color:var(--subtle);border:1px solid var(--line);background:transparent;cursor:pointer;transition:all .18s;letter-spacing:.3px}
+.sf:hover{border-color:var(--gold);color:var(--white)}
+.sf.on{background:var(--gold);border-color:var(--gold);color:#000;font-weight:600}
+
+/* ── JOGOS ───────────────────────────────────────────── */
+.jogos-grid{display:grid;grid-template-columns:3fr 2fr;gap:16px;margin-top:20px}
+.panel{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.panel-head{padding:12px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.panel-title{font-family:var(--display);font-size:.85rem;letter-spacing:2px;text-transform:uppercase;color:var(--white)}
+.fr{padding:10px 16px;border-bottom:1px solid rgba(255,255,255,.03);transition:background .15s}
+.fr:last-child{border-bottom:none}
+.fr:hover{background:var(--ink3)}
+.fr.next{background:var(--goldfade);border-left:3px solid var(--gold)}
+.fr-row{display:grid;grid-template-columns:40px 1fr auto;gap:10px;align-items:start}
+.fr-date-box{text-align:center}
+.fr-day{font-family:var(--display);font-size:1.3rem;color:var(--white);line-height:1}
+.fr-mon{font-size:8px;letter-spacing:2px;text-transform:uppercase;color:var(--subtle);display:block}
+.fr-match{font-size:12.5px;font-weight:600;color:var(--white);line-height:1.25;margin-bottom:3px}
+.fr-comp{font-size:9.5px;color:var(--subtle);letter-spacing:.5px}
+.fr-comp.cup{color:var(--gold);opacity:.8}
+.fr-tv-line{font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5}
+.fr-tv-line strong{color:var(--white);font-weight:600}
+.res{font-family:var(--display);font-size:.9rem;padding:2px 8px;border-radius:3px;letter-spacing:1px;white-space:nowrap}
+.res-w{background:rgba(74,222,128,.12);color:#4ADE80;border:1px solid rgba(74,222,128,.2)}
+.res-d{background:rgba(250,204,21,.1);color:#FDE68A;border:1px solid rgba(250,204,21,.18)}
+.res-l{background:rgba(248,113,113,.1);color:#FCA5A5;border:1px solid rgba(248,113,113,.18)}
+
+/* ── TABELA ──────────────────────────────────────────── */
+.std-wrap{margin-top:20px}
+.stt-wrap{overflow-x:auto}
+.stt{width:100%;border-collapse:collapse}
+.stt th{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--subtle);padding:8px 8px;text-align:center;border-bottom:1px solid var(--line);font-weight:500}
+.stt th:nth-child(1),.stt th:nth-child(2){text-align:left}
+.stt td{padding:7px 8px;text-align:center;font-size:11.5px;color:var(--muted);border-bottom:1px solid rgba(255,255,255,.025)}
+.stt td:nth-child(1),.stt td:nth-child(2){text-align:left}
+.stt tr:hover td{background:rgba(255,255,255,.012)}
+.stt tr.vr td{background:var(--goldfade)}
+.stt tr.vr td:first-child{border-left:3px solid var(--gold)}
+.pos-num{font-family:var(--display);font-size:.9rem;color:var(--subtle)}
+.pos-dot{display:inline-block;width:4px;height:4px;border-radius:50%;margin-right:4px;vertical-align:middle;flex-shrink:0}
+.plib{background:#60A5FA}.psul{background:var(--gold)}.preb{background:#F87171}
+.team-cell{display:flex;align-items:center;gap:7px}
+.team-ico{width:20px;height:20px;border-radius:50%;background:var(--ink4);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:6.5px;color:var(--subtle);flex-shrink:0}
+.team-ico.vico{border-color:var(--gold);color:var(--gold2);background:var(--goldfade)}
+.team-name{font-size:11.5px;font-weight:500;color:var(--muted)}
+.team-name.vname{color:var(--white);font-weight:600}
+.pts-cell{font-family:var(--display);font-size:1rem;color:var(--white)}
+.form-dots{display:flex;gap:2px;justify-content:center}
+.fd{width:9px;height:9px;border-radius:2px;font-size:5.5px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fdw{background:rgba(74,222,128,.2);color:#4ADE80}
+.fdd{background:rgba(250,204,21,.15);color:#FDE68A}
+.fdl{background:rgba(248,113,113,.18);color:#FCA5A5}
+.stt-legend{display:flex;gap:16px;padding:8px 8px;border-top:1px solid var(--line);flex-wrap:wrap}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:9.5px;color:var(--subtle)}
+
+/* ── HISTORIA ────────────────────────────────────────── */
+.hist-section{padding:32px 0}
+.idols-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.idol-card{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;cursor:pointer;transition:all .22s}
+.idol-card:hover{border-color:var(--gold);transform:translateY(-3px);box-shadow:0 8px 24px rgba(0,0,0,.4)}
+.idol-art{height:130px;display:flex;align-items:center;justify-content:center;overflow:hidden;background:var(--ink3)}
+.idol-body{padding:11px}
+.idol-name{font-family:var(--serif);font-size:.88rem;font-weight:700;color:var(--white);margin-bottom:2px}
+.idol-era{font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;font-weight:500;display:block;margin-bottom:5px}
+.idol-desc{font-size:10.5px;color:var(--muted);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.titles-scroll{overflow:hidden;padding:16px 0;border-top:1px solid var(--line);margin-top:24px}
+.titles-track{display:flex;gap:28px;animation:tick 30s linear infinite;white-space:nowrap}
+.title-chip{display:flex;align-items:center;gap:8px;font-size:10.5px;color:rgba(240,237,232,.35);flex-shrink:0}
+.title-chip b{font-family:var(--display);font-size:13px;color:var(--gold);letter-spacing:1px}
+.title-chip::after{content:"✦";font-size:6px;margin-left:8px;opacity:.3}
+
+/* ── STATS ───────────────────────────────────────────── */
+.stats-section{padding:32px 0}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:20px}
+.kpi{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:16px;text-align:center}
+.kpi-val{font-family:var(--display);font-size:2.2rem;color:var(--gold2);display:block;line-height:1}
+.kpi-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--subtle);display:block;margin-top:4px}
+.kpi-sub{font-size:10px;color:var(--subtle);margin-top:3px}
+.stats-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat-card{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.stat-head{padding:10px 14px;border-bottom:1px solid var(--line);font-family:var(--display);font-size:.78rem;letter-spacing:2px;text-transform:uppercase;color:var(--white)}
+.stat-body{padding:14px}
+.chart-h{height:220px;position:relative}
+.top-list{display:flex;flex-direction:column;gap:5px}
+.top-row{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:5px;background:var(--ink3);transition:background .15s}
+.top-row:hover{background:var(--ink4)}
+.top-rank{font-family:var(--display);font-size:.85rem;color:var(--subtle);min-width:16px}
+.top-rank.r1{color:var(--gold2)}
+.top-rank.r2{color:var(--muted)}
+.top-ico{width:24px;height:24px;border-radius:50%;background:var(--ink4);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:7px;color:var(--subtle);flex-shrink:0}
+.top-ico.hi{border-color:rgba(200,168,75,.35);color:var(--gold2)}
+.top-info{flex:1;min-width:0}
+.top-name{font-size:12px;font-weight:600;color:var(--white);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-det{font-size:9.5px;color:var(--subtle)}
+.top-val{font-family:var(--display);font-size:1rem;color:var(--white);flex-shrink:0}
+.top-bar-w{width:36px;height:2px;background:var(--ink4);border-radius:1px;flex-shrink:0}
+.top-bar-f{height:100%;background:var(--gold);border-radius:1px;transition:width 1s ease}
+
+/* ── PESQUISAS ───────────────────────────────────────── */
+.polls-section{padding:32px 0}
+.polls-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}
+.poll-card{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.poll-head{padding:11px 14px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between}
+.poll-label{font-family:var(--display);font-size:.75rem;letter-spacing:2px;text-transform:uppercase;color:var(--white)}
+.poll-status{font-size:9px;color:var(--muted)}
+.poll-body{padding:14px}
+.poll-q{font-family:var(--serif);font-size:.95rem;font-weight:700;color:var(--white);line-height:1.3;margin-bottom:12px}
+.poll-opts{display:flex;flex-direction:column;gap:5px}
+.poll-opt{width:100%;background:var(--ink3);border:1px solid var(--line);border-radius:5px;padding:8px 11px;text-align:left;font-family:var(--sans);font-size:12px;color:var(--white);cursor:pointer;transition:all .18s;position:relative;overflow:hidden}
+.poll-opt:hover:not(:disabled){border-color:var(--gold);background:var(--ink4)}
+.poll-opt:disabled{cursor:not-allowed}
+.poll-opt.winner{border-color:var(--gold)}
+.poll-bar-bg{position:absolute;left:0;top:0;bottom:0;background:var(--goldfade);border-radius:5px;transition:width .8s ease;pointer-events:none}
+.poll-opt-row{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.poll-pct{font-family:var(--mono);font-size:11px;color:var(--gold2);flex-shrink:0}
+.poll-foot{display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--line);font-size:10px;color:var(--subtle)}
+.poll-news{margin-top:9px;padding:8px 10px;background:rgba(200,168,75,.07);border:1px solid rgba(200,168,75,.18);border-radius:5px;font-size:11px;color:var(--muted);line-height:1.55;display:none}
+.poll-news.show{display:block}
+.poll-news strong{color:var(--gold2)}
+
+/* ── QUIZ ────────────────────────────────────────────── */
+.quiz-section{padding:32px 0;min-height:70vh}
+.q-home{max-width:600px;margin:0 auto;text-align:center;padding:20px 0}
+.q-cats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:20px 0}
+.q-cat{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .2s;text-align:center}
+.q-cat:hover,.q-cat.featured{border-color:var(--gold)}
+.q-cat.featured{background:var(--goldfade)}
+.q-cat-icon{font-size:22px;display:block;margin-bottom:5px}
+.q-cat-name{font-family:var(--display);font-size:.82rem;letter-spacing:1px;color:var(--white);display:block}
+.q-cat-count{font-size:9.5px;color:var(--subtle)}
+.q-game{max-width:640px;margin:0 auto;padding:10px 0}
+.qprog{height:2px;background:var(--ink3);border-radius:1px;margin-bottom:20px;overflow:hidden}
+.qpf{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold2));border-radius:1px;transition:width .4s}
+.q-bar{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;font-size:12px;color:var(--muted)}
+.q-num{font-family:var(--mono)}
+.q-score-d{color:var(--gold2);font-weight:600}
+.q-timer{font-family:var(--mono);font-size:.95rem;color:var(--white)}
+.q-timer.warn{color:#F87171;animation:blink 1s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.q-box{background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:20px}
+.q-cat-tag{font-family:var(--display);font-size:9px;letter-spacing:2.5px;color:var(--gold);text-transform:uppercase;margin-bottom:8px}
+.q-txt{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--white);line-height:1.3;margin-bottom:16px}
+.q-opts{display:flex;flex-direction:column;gap:6px}
+.q-opt{background:var(--ink3);border:1.5px solid var(--line);border-radius:7px;padding:9px 13px;text-align:left;font-size:13px;color:var(--white);cursor:pointer;transition:all .18s;display:flex;align-items:center;gap:8px}
+.q-opt:hover:not(:disabled){border-color:var(--gold);background:var(--ink4)}
+.q-opt:disabled{cursor:not-allowed}
+.q-opt.correct{border-color:#4ADE80;background:rgba(74,222,128,.07);color:#4ADE80}
+.q-opt.wrong{border-color:#F87171;background:rgba(248,113,113,.07);color:#F87171}
+.q-letter{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:9px;flex-shrink:0}
+.q-opt.correct .q-letter{border-color:#4ADE80;color:#4ADE80}
+.q-opt.wrong .q-letter{border-color:#F87171;color:#F87171}
+.q-fb{margin-top:12px;padding:10px 12px;border-radius:7px;font-size:12px;line-height:1.6;display:none}
+.q-fb.show{display:block}
+.q-fb.ok{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);color:#4ADE80}
+.q-fb.nok{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:#FCA5A5}
+.q-next{margin-top:11px;display:none}
+.q-next.show{display:flex}
+.q-result{max-width:460px;margin:0 auto;text-align:center;padding:24px 0}
+
+/* ── NEWSLETTER ──────────────────────────────────────── */
+.nl-section{padding:32px 0}
+.nl-card{background:var(--ink2);border:1px solid var(--line);border-radius:10px;padding:36px;max-width:820px;margin:0 auto}
+.nl-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+.nl-feats{display:flex;flex-direction:column;gap:9px;margin:16px 0 20px}
+.nl-feat{display:flex;align-items:flex-start;gap:10px;font-size:12.5px;color:var(--muted)}
+.nl-feat-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.nl-feat strong{color:var(--white)}
+.nl-form-box{background:var(--ink3);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.nl-form-title{font-family:var(--display);font-size:.9rem;letter-spacing:2px;color:var(--white);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.nl-lbl{display:block;font-size:9.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin-bottom:4px;font-weight:500}
+.nl-inp{width:100%;background:var(--ink4);border:1px solid var(--line2);border-radius:5px;padding:9px 12px;color:var(--white);font-size:13px;font-family:var(--sans);transition:border-color .2s;margin-bottom:10px}
+.nl-inp:focus{outline:none;border-color:var(--gold)}
+.nl-inp::placeholder{color:var(--subtle)}
+.nl-sel{width:100%;background:var(--ink4);border:1px solid var(--line2);border-radius:5px;padding:9px 12px;color:var(--white);font-size:13px;font-family:var(--sans);-webkit-appearance:none;appearance:none;margin-bottom:10px}
+.nl-msg{padding:9px 12px;border-radius:5px;font-size:12px;margin-top:6px;display:none}
+.nl-msg.ok{background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);color:#4ADE80;display:block}
+.nl-msg.err{background:rgba(248,113,113,.08);border:1px solid rgba(248,113,113,.2);color:#FCA5A5;display:block}
+.nl-counter{text-align:center;padding-top:14px;border-top:1px solid var(--line);margin-top:12px}
+.nl-count{font-family:var(--display);font-size:2rem;color:var(--gold2);display:block;line-height:1}
+.nl-count-lbl{font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--subtle);display:block;margin-top:3px}
+
+/* ── SOBRE ───────────────────────────────────────────── */
+.sobre-section{padding:32px 0}
+.sobre-grid{display:grid;grid-template-columns:2fr 1fr;gap:24px;max-width:860px}
+.sobre-block{background:var(--ink2);border:1px solid var(--line);border-radius:var(--r);padding:22px}
+.sobre-title{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--white);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.sobre-text{font-size:13px;color:var(--muted);line-height:1.8}
+.sobre-text strong{color:var(--white)}
+.feature-list{display:flex;flex-direction:column;gap:7px;margin-top:12px}
+.feat{display:flex;align-items:flex-start;gap:8px;font-size:12.5px;color:var(--muted)}
+.feat::before{content:"✓";color:var(--gold);flex-shrink:0;font-weight:700;margin-top:1px}
+.source-list{display:flex;flex-direction:column;gap:5px;margin-top:10px}
+.source-row{display:flex;align-items:center;gap:8px;padding:7px 10px;background:var(--ink3);border:1px solid var(--line);border-radius:5px;font-size:11px;color:var(--muted);transition:border-color .15s;cursor:default}
+.source-row:hover{border-color:var(--line2)}
+.source-dot{width:5px;height:5px;border-radius:50%;background:var(--gold);flex-shrink:0}
+.source-row.social .source-dot{background:#60A5FA}
+.source-row.social{color:#93C5FD}
+
+/* ── MODALS ──────────────────────────────────────────── */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:600;display:flex;align-items:flex-start;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(8px);overflow-y:auto}
+.overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--ink2);border:1px solid var(--line2);border-radius:12px;max-width:700px;width:100%;position:relative;transform:scale(.95);transition:transform .3s;margin:auto}
+.overlay.open .modal{transform:scale(1)}
+.modal-close{position:absolute;top:12px;right:12px;background:var(--ink3);border:1px solid var(--line);color:var(--muted);width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:13px;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:5}
+.modal-close:hover{color:var(--white);border-color:var(--line2)}
+.modal-body{padding:24px}
+.modal-cat{display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.modal-title{font-family:var(--serif);font-size:clamp(1.2rem,3vw,1.7rem);font-weight:900;color:var(--white);margin-bottom:10px;line-height:1.2}
+.modal-meta{font-size:10px;color:var(--subtle);margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.modal-content{font-size:13px;color:var(--muted);line-height:1.85}
+.modal-content p{margin-bottom:12px}
+.modal-content strong{color:var(--white)}
+.modal-source{font-size:10px;color:var(--subtle);padding-top:14px;border-top:1px solid var(--line);margin-top:4px}
+.modal-source a{color:var(--gold2);text-decoration:underline}
+
+/* idol modal */
+.idol-modal{max-width:560px}
+.idol-art-modal{height:180px;overflow:hidden}
+.idol-modal-body{padding:18px}
+.idol-ib-name{font-family:var(--serif);font-size:1.5rem;font-weight:900;color:var(--white);margin-bottom:2px}
+.idol-ib-era{font-size:9px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);display:block;margin-bottom:12px;font-weight:500}
+.idol-stats-row{display:flex;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:13px}
+.istat{flex:1;text-align:center;padding:8px 6px;border-right:1px solid var(--line)}
+.istat:last-child{border-right:none}
+.istat-v{font-family:var(--display);font-size:1.2rem;color:var(--gold2);display:block;line-height:1}
+.istat-l{font-size:7.5px;letter-spacing:1.5px;text-transform:uppercase;color:var(--subtle);display:block;margin-top:2px}
+.idol-bio{font-size:12.5px;color:var(--muted);line-height:1.75}
+
+/* bulletin modal */
+.bul-modal{max-width:560px}
+.bul-head{padding:14px 18px;border-bottom:1px solid var(--line);background:var(--ink3);display:flex;align-items:center;justify-content:space-between}
+.bul-title{font-family:var(--display);letter-spacing:2px;font-size:1rem;color:var(--white)}
+.bul-date{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--gold)}
+.bul-body{padding:18px;display:flex;flex-direction:column;gap:14px}
+.bul-sec{border-bottom:1px solid var(--line);padding-bottom:14px}
+.bul-sec:last-child{border-bottom:none;padding-bottom:0}
+.bul-sec-title{font-family:var(--display);font-size:.78rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold2);margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.bul-content{font-size:12px;color:var(--muted);line-height:1.75}
+.bul-content strong{color:var(--white)}
+
+/* chatbot */
+.chat-widget{position:fixed;bottom:22px;right:22px;z-index:500}
+.chat-btn{width:52px;height:52px;border-radius:50%;background:var(--ink3);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,.5),0 0 12px rgba(200,168,75,.12);transition:all .3s;animation:float 4s ease-in-out infinite}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.chat-btn:hover{transform:scale(1.1) !important;animation:none}
+.chat-badge{position:absolute;top:-2px;right:-2px;width:14px;height:14px;border-radius:50%;background:var(--gold);color:#000;font-size:8px;font-weight:700;font-family:var(--display);display:flex;align-items:center;justify-content:center;border:2px solid var(--ink)}
+.chat-panel{position:absolute;bottom:60px;right:0;width:310px;background:var(--ink2);border:1px solid var(--line2);border-radius:10px;overflow:hidden;box-shadow:0 14px 40px rgba(0,0,0,.7);transform:scale(.9) translateY(8px);transform-origin:bottom right;opacity:0;pointer-events:none;transition:all .28s cubic-bezier(.34,1.56,.64,1)}
+.chat-panel.open{transform:scale(1) translateY(0);opacity:1;pointer-events:all}
+.ch-head{background:var(--ink3);border-bottom:1px solid var(--line);padding:10px 13px;display:flex;align-items:center;gap:9px}
+.ch-av{width:30px;height:30px;border-radius:50%;background:var(--gold);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.ch-inf h4{font-family:var(--display);font-size:.82rem;letter-spacing:1px;color:var(--white)}
+.ch-inf p{font-size:9px;color:var(--muted);display:flex;align-items:center;gap:3px}
+.ch-on{width:4px;height:4px;border-radius:50%;background:#4ADE80;display:inline-block}
+.ch-close{margin-left:auto;color:var(--muted);font-size:14px;line-height:1;cursor:pointer;transition:color .2s}
+.ch-close:hover{color:var(--white)}
+.ch-msgs{height:230px;overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:7px}
+.ch-msgs::-webkit-scrollbar{width:2px}
+.ch-msgs::-webkit-scrollbar-thumb{background:var(--gold)}
+.ch-msg{display:flex;flex-direction:column;max-width:86%;animation:fadein .25s ease}
+.ch-msg.bot{align-self:flex-start}.ch-msg.usr{align-self:flex-end}
+.ch-bubble{padding:7px 10px;border-radius:9px;font-size:11.5px;line-height:1.5}
+.ch-msg.bot .ch-bubble{background:var(--ink3);color:var(--white);border-bottom-left-radius:3px}
+.ch-msg.usr .ch-bubble{background:var(--gold);color:#000;font-weight:500;border-bottom-right-radius:3px}
+.ch-ts{font-size:8px;color:var(--subtle);margin-top:2px;font-family:var(--mono)}
+.ch-msg.usr .ch-ts{text-align:right}
+.ch-typing{display:none;gap:3px;align-items:center;padding:7px 10px;background:var(--ink3);border-radius:9px;border-bottom-left-radius:3px;width:42px}
+.ch-typing.show{display:flex}
+.td{width:4px;height:4px;border-radius:50%;background:var(--muted);animation:bounce .8s ease infinite}
+.td:nth-child(2){animation-delay:.15s}.td:nth-child(3){animation-delay:.3s}
+@keyframes bounce{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+.ch-suggs{padding:5px 7px;display:flex;flex-wrap:wrap;gap:4px;border-top:1px solid var(--line)}
+.ch-sg{background:var(--ink3);border:1px solid var(--line);border-radius:10px;padding:3px 8px;font-size:9.5px;color:var(--muted);cursor:pointer;transition:all .15s}
+.ch-sg:hover{border-color:var(--gold);color:var(--gold)}
+.ch-input-row{padding:6px 8px;border-top:1px solid var(--line);display:flex;gap:5px}
+.ch-inp{flex:1;background:var(--ink3);border:1px solid var(--line);border-radius:5px;padding:5px 9px;color:var(--white);font-size:11px;font-family:var(--sans)}
+.ch-inp:focus{outline:none;border-color:var(--gold)}
+.ch-inp::placeholder{color:var(--subtle)}
+.ch-send{background:var(--gold);color:#000;border:none;border-radius:5px;padding:5px 10px;font-size:12px;font-weight:700;cursor:pointer;transition:background .2s}
+.ch-send:hover{background:var(--gold2)}
+.ch-fn{font-size:8px;text-align:center;color:var(--subtle);padding:3px;border-top:1px solid var(--line);letter-spacing:.5px}
+
+/* ── FOOTER ──────────────────────────────────────────── */
+footer{background:var(--ink2);border-top:1px solid var(--line);padding:36px 0 18px;margin-top:40px}
+.ft-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:32px;margin-bottom:24px}
+.ft-brand-name{font-family:var(--display);font-size:1.5rem;letter-spacing:4px;color:var(--white);display:block}
+.ft-brand-sub{font-size:9px;letter-spacing:2px;color:var(--gold);text-transform:uppercase;display:block;margin-bottom:9px}
+.ft-desc{font-size:11.5px;color:var(--subtle);line-height:1.75;max-width:200px}
+.ft-col h4{font-family:var(--display);font-size:.72rem;letter-spacing:2px;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
+.ft-col ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+.ft-col a,.ft-col span{font-size:11.5px;color:var(--subtle);transition:color .15s;display:block;cursor:pointer}
+.ft-col a:hover,.ft-col span:hover{color:var(--gold)}
+.ft-bottom{border-top:1px solid var(--line);padding-top:14px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.ft-copy{font-size:10px;color:var(--subtle);line-height:1.65}
+.ft-socials{display:flex;gap:6px}
+.ft-soc{width:28px;height:28px;border-radius:50%;background:var(--ink3);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);cursor:pointer;transition:all .18s}
+.ft-soc:hover{background:var(--gold);border-color:var(--gold);color:#000;transform:translateY(-2px)}
+
+/* ── RESPONSIVE ──────────────────────────────────────── */
+@media(max-width:1100px){
+  .hero-grid,.jogos-grid,.nl-grid,.ft-grid,.sobre-grid{grid-template-columns:1fr}
+  .idols-grid{grid-template-columns:1fr 1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .stats-grid{grid-template-columns:1fr}
+  .polls-grid{grid-template-columns:1fr}
+}
+@media(max-width:768px){
+  .nav{display:none}
+  .ng-featured,.ng-row{grid-template-columns:1fr}
+  .idols-grid{grid-template-columns:1fr 1fr}
+  .q-cats{grid-template-columns:1fr 1fr}
+  .ft-grid{grid-template-columns:1fr}
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .chat-panel{width:calc(100vw - 28px);right:-8px}
+}
+@media(max-width:480px){
+  .idols-grid,.q-cats{grid-template-columns:1fr}
+  .hero-stats{gap:12px}
+  .wrap{padding:0 16px}
+}
+</style>
+</head>
+<body>
+
+<!-- ARTICLE OVERLAY -->
+<div class="overlay" id="artOv" onclick="if(event.target===this)closeArt()">
+  <div class="modal">
+    <button class="modal-close" onclick="closeArt()">✕</button>
+    <div class="modal-body">
+      <div class="modal-cat" id="artCat"></div>
+      <h1 class="modal-title" id="artTitle"></h1>
+      <div class="modal-meta" id="artMeta"></div>
+      <div class="modal-content" id="artBody"></div>
+      <div class="modal-source" id="artSrc"></div>
+    </div>
+  </div>
+</div>
+
+<!-- IDOL OVERLAY -->
+<div class="overlay" id="idolOv" onclick="if(event.target===this)closeIdol()">
+  <div class="modal idol-modal">
+    <button class="modal-close" onclick="closeIdol()">✕</button>
+    <div class="idol-art-modal" id="idolArt"></div>
+    <div class="idol-modal-body">
+      <div class="idol-ib-name" id="idolName"></div>
+      <span class="idol-ib-era" id="idolEra"></span>
+      <div class="idol-stats-row" id="idolStats"></div>
+      <div class="idol-bio" id="idolBio"></div>
+    </div>
+  </div>
+</div>
+
+<!-- BULLETIN OVERLAY -->
+<div class="overlay" id="bulOv">
+  <div class="modal bul-modal">
+    <div class="bul-head">
+      <div>
+        <div class="bul-title">⚓ Boletim Vascaíno</div>
+        <div class="bul-date" id="bulDate"></div>
+      </div>
+      <button class="modal-close" style="position:static;width:24px;height:24px" onclick="closeBul()">✕</button>
+    </div>
+    <div class="bul-body" id="bulBody">
+      <div style="text-align:center;padding:20px;color:var(--muted);font-size:12px">Gerando boletim...</div>
+    </div>
+    <div style="padding:12px 18px;border-top:1px solid var(--line);display:flex;gap:7px;flex-wrap:wrap">
+      <button class="btn btn-gold" onclick="closeBul()">Fechar</button>
+      <button class="btn btn-ghost" onclick="goPage('noticias');closeBul()">Ver Notícias</button>
+    </div>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-label">HOJE</div>
+  <div class="ticker-wrap">
+    <div class="ticker-inner" id="tickerTrack">
+      <span class="ti"><b>20h30</b> Coritiba × Vasco — Couto Pereira — sportv / Premiere / Globoplay</span>
+      <span class="ti"><b>ESGOTADO</b> Vasco × Botafogo 04/04 — São Januário</span>
+      <span class="ti"><b>BASQUETE</b> Vasco × Paulistano — 20h — NBB — São Januário</span>
+      <span class="ti">Andres Gomez suspenso — Marino deve ser o titular</span>
+      <span class="ti">Cuiabano monitorado por Bayer Leverkusen e Borussia Dortmund</span>
+      <span class="ti">Remo: 7 medalhas no Sul-Americano em Porto Alegre</span>
+      <span class="ti">SAF: Lamacchia avança nas negociações com o Vasco</span>
+      <span class="ti">Sul-Americana: estreia 07/04 em Buenos Aires contra o Barracas Central</span>
+      <span class="ti"><b>20h30</b> Coritiba × Vasco — Couto Pereira — sportv / Premiere / Globoplay</span>
+      <span class="ti"><b>ESGOTADO</b> Vasco × Botafogo 04/04 — São Januário</span>
+      <span class="ti"><b>BASQUETE</b> Vasco × Paulistano — 20h — NBB — São Januário</span>
+      <span class="ti">Andres Gomez suspenso — Marino deve ser o titular</span>
+      <span class="ti">Cuiabano monitorado por Bayer Leverkusen e Borussia Dortmund</span>
+      <span class="ti">Remo: 7 medalhas no Sul-Americano em Porto Alegre</span>
+      <span class="ti">SAF: Lamacchia avança nas negociações com o Vasco</span>
+      <span class="ti">Sul-Americana: estreia 07/04 em Buenos Aires contra o Barracas Central</span>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div class="wrap">
+    <div class="hdr">
+      <div class="logo" onclick="goPage('inicio')">
+        <div class="logo-main">IA <span>VASCO</span> NEWS</div>
+        <div class="logo-sub">Fan Site · 1898</div>
+      </div>
+      <nav class="nav">
+        <button class="nav-btn on" id="nav-inicio" onclick="goPage('inicio')">Notícias</button>
+        <button class="nav-btn" id="nav-jogos" onclick="goPage('jogos')">Jogos</button>
+        <button class="nav-btn" id="nav-tabela" onclick="goPage('tabela')">Tabela</button>
+        <button class="nav-btn" id="nav-historia" onclick="goPage('historia')">História</button>
+        <button class="nav-btn" id="nav-estatisticas" onclick="goPage('estatisticas')">Stats</button>
+        <button class="nav-btn" id="nav-pesquisas" onclick="goPage('pesquisas')">Pesquisas</button>
+        <button class="nav-btn" id="nav-quiz" onclick="goPage('quiz')">Quiz</button>
+        <button class="nav-btn" id="nav-newsletter" onclick="goPage('newsletter')">Newsletter</button>
+        <button class="nav-btn" id="nav-sobre" onclick="goPage('sobre')">Sobre</button>
+      </nav>
+      <div class="hdr-r">
+        <div class="clock">
+          <span class="clock-t" id="clockT">--:--:--</span>
+          <span class="clock-d" id="clockD">BRT</span>
+        </div>
+        <button class="btn btn-gold" onclick="showBul()" style="font-size:11px;padding:6px 13px">📰 Boletim</button>
+      </div>
+    </div>
+  </div>
+  <!-- AI bar — slim, unobtrusive -->
+  <div class="ai-bar">
+    <div class="wrap">
+      <div class="ai-bar-inner">
+        <div class="ai-brand">
+          <div class="ai-dot"></div>
+          <span class="ai-label">IA Vasco News — Motor Claude AI</span>
+        </div>
+        <div class="ai-timer">Próxima atualização: <span id="aiCountdown">10:00</span></div>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<!-- ═══════════════ PAGE: INÍCIO / NOTÍCIAS ═══════════════ -->
+<div id="page-inicio" class="page on">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <div class="hero-eyebrow">
+            <div class="eyebrow-line"></div>
+            <span class="eyebrow-tag">Brasileirão · R9 · 01 Abr 2026</span>
+          </div>
+          <h1 class="hero-title">GIGANTE<br>DA<br><em>COLINA</em></h1>
+          <p class="hero-lead">Renato Gaúcho invicto no comando. Vasco enfrenta o Coritiba <strong style="color:var(--white)">hoje às 20h30</strong> em Curitiba. Ingressos para o clássico contra o Botafogo já esgotaram.</p>
+          <div class="hero-stats">
+            <div class="hs"><span class="hs-val">9°</span><span class="hs-lbl">Posição</span></div>
+            <div class="hs"><span class="hs-val g">11</span><span class="hs-lbl">Pontos</span></div>
+            <div class="hs"><span class="hs-val g">3</span><span class="hs-lbl">Vitórias</span></div>
+            <div class="hs"><span class="hs-val">2</span><span class="hs-lbl">Empates</span></div>
+            <div class="hs"><span class="hs-val">3</span><span class="hs-lbl">Derrotas</span></div>
+            <div class="hs"><span class="hs-val">8</span><span class="hs-lbl">Jogos</span></div>
+          </div>
+          <div class="hero-btns">
+            <button class="btn btn-gold" onclick="goPage('jogos')">📅 Jogos</button>
+            <button class="btn btn-ghost" onclick="goPage('tabela')">Tabela</button>
+            <button class="btn btn-ghost" onclick="goPage('quiz')">Quiz 300</button>
+            <button class="btn btn-ghost" onclick="goPage('pesquisas')">Pesquisas</button>
+          </div>
+        </div>
+        <!-- match card -->
+        <div class="mc">
+          <div class="mc-top">
+            <span class="mc-comp">Brasileirão Série A · R9</span>
+            <span class="mc-live">HOJE 20h30</span>
+          </div>
+          <div class="mc-body">
+            <div class="mc-vs">
+              <div class="mc-team">
+                <div class="mc-badge">CFC</div>
+                <div class="mc-name">Coritiba</div>
+                <div class="mc-info">15° · 6pts</div>
+              </div>
+              <div class="mc-sep">
+                <span class="mc-sep-x">×</span>
+                <span class="mc-sep-t">20:30</span>
+              </div>
+              <div class="mc-team">
+                <div class="mc-badge home">VAS</div>
+                <div class="mc-name" style="color:var(--gold2)">Vasco</div>
+                <div class="mc-info">9° · 11pts</div>
+              </div>
+            </div>
+            <div class="mc-cd">
+              <span class="mc-cd-lbl">Começa em</span>
+              <div class="mc-cd-nums">
+                <div><span class="cdn" id="cdH">--</span><span class="cdu">hrs</span></div>
+                <span class="cds">:</span>
+                <div><span class="cdn" id="cdM">--</span><span class="cdu">min</span></div>
+                <span class="cds">:</span>
+                <div><span class="cdn" id="cdS">--</span><span class="cdu">seg</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="mc-where">📍 Estádio Couto Pereira · Curitiba, PR</div>
+          <div class="mc-tv"><strong>TV:</strong> sportv · Premiere &nbsp;|&nbsp; <strong>Internet:</strong> Globoplay · Premiere Play</div>
+          <div style="padding:7px 14px;background:rgba(248,113,113,.06);border-top:1px solid rgba(248,113,113,.12);font-size:10px;color:#FCA5A5;text-align:center">
+            ⚠ Andres Gomez suspenso · Cuiabano em dúvida
+          </div>
+          <div class="mc-ft">
+            <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:11px" onclick="goPage('jogos')">Ver todos os jogos</button>
+          </div>
+        </div>
+      </div>
+      <!-- sport tabs -->
+      <div class="hero-strip">
+        <div class="hs-tab on" onclick="filterSport(this,'todos')">⚽ Todos</div>
+        <div class="hs-tab" onclick="filterSport(this,'futebol')">Futebol</div>
+        <div class="hs-tab" onclick="filterSport(this,'basquete')">Basquete</div>
+        <div class="hs-tab" onclick="filterSport(this,'remo')">Remo</div>
+        <div class="hs-tab" onclick="filterSport(this,'beach')">Beach Soccer</div>
+        <div class="hs-tab" onclick="filterSport(this,'feminino')">Feminino</div>
+        <div class="hs-tab" onclick="filterSport(this,'base')">Base</div>
+        <div class="hs-tab" onclick="filterSport(this,'clube')">Clube/SAF</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- NEWS -->
+  <section class="news-section">
+    <div class="wrap">
+      <div class="section-head">
+        <span class="section-title">Notícias de Hoje</span>
+        <span class="section-meta" id="newsMeta">Atualizando...</span>
+      </div>
+      <div id="newsGrid"></div>
+    </div>
+  </section>
+
+</div><!-- /page-inicio -->
+
+
+<!-- ═══════════════ PAGE: JOGOS ═══════════════ -->
+<div id="page-jogos" class="page">
+<div class="wrap" style="padding-top:32px;padding-bottom:40px">
+  <div class="section-head"><span class="section-title">Calendário 2026</span><span class="section-meta">Resultados verificados · Próximos jogos com transmissão</span></div>
+  <div class="jogos-grid">
+    <div>
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">Próximos Jogos</span></div>
+        <div class="fr next">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">01</div><div class="fr-mon">Abr</div></div>
+            <div>
+              <div class="fr-match">Coritiba × <strong>Vasco</strong></div>
+              <div class="fr-comp">Brasileirão · R9 <strong style="color:#4ADE80;font-size:9px;margin-left:4px">HOJE</strong></div>
+              <div class="fr-tv-line"><strong>TV:</strong> sportv · Premiere &nbsp;·&nbsp; <strong>Internet:</strong> Globoplay · Premiere Play</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--gold2)">20h30</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">Couto Pereira</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">04</div><div class="fr-mon">Abr</div></div>
+            <div>
+              <div class="fr-match"><strong>Vasco</strong> × Botafogo <span style="background:rgba(248,113,113,.15);color:#FCA5A5;font-size:8px;padding:1px 5px;border-radius:3px;margin-left:4px">ESGOTADO</span></div>
+              <div class="fr-comp">Brasileirão · R10</div>
+              <div class="fr-tv-line"><strong>TV:</strong> Globo · sportv · Premiere &nbsp;·&nbsp; <strong>Internet:</strong> Globoplay · Cazé TV</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">21h00</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">São Januário</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">07</div><div class="fr-mon">Abr</div></div>
+            <div>
+              <div class="fr-match">Barracas Central × <strong>Vasco</strong></div>
+              <div class="fr-comp cup">Sul-Americana · Grupo G · R1</div>
+              <div class="fr-tv-line"><strong>TV:</strong> ESPN · Star+ &nbsp;·&nbsp; <strong>Internet:</strong> Disney+</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">19h00</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">Buenos Aires</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">12</div><div class="fr-mon">Abr</div></div>
+            <div>
+              <div class="fr-match">Remo × <strong>Vasco</strong></div>
+              <div class="fr-comp">Brasileirão · R11</div>
+              <div class="fr-tv-line"><strong>TV:</strong> sportv · Premiere &nbsp;·&nbsp; <strong>Internet:</strong> Globoplay · Premiere Play</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">A def.</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">Belém</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">14</div><div class="fr-mon">Abr</div></div>
+            <div>
+              <div class="fr-match"><strong>Vasco</strong> × Audax Italiano</div>
+              <div class="fr-comp cup">Sul-Americana · Grupo G · R2</div>
+              <div class="fr-tv-line"><strong>TV:</strong> ESPN · Star+ &nbsp;·&nbsp; <strong>Internet:</strong> Disney+</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">21h00</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">São Januário</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">19</div><div class="fr-mon">Abr</div></div>
+            <div>
+              <div class="fr-match"><strong>Vasco</strong> × São Paulo</div>
+              <div class="fr-comp">Brasileirão · R12</div>
+              <div class="fr-tv-line"><strong>TV:</strong> sportv · Premiere &nbsp;·&nbsp; <strong>Internet:</strong> Globoplay · Premiere Play</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">A def.</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">São Januário</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">26</div><div class="fr-mon">Abr</div></div>
+            <div>
+              <div class="fr-match">Corinthians × <strong>Vasco</strong></div>
+              <div class="fr-comp">Brasileirão · R13</div>
+              <div class="fr-tv-line"><strong>TV:</strong> sportv · Premiere &nbsp;·&nbsp; <strong>Internet:</strong> Globoplay · Premiere Play</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">A def.</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">Neo Química Arena</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">03</div><div class="fr-mon">Mai</div></div>
+            <div>
+              <div class="fr-match">Flamengo × <strong>Vasco</strong> <span style="color:var(--gold);font-size:9px;font-weight:700;margin-left:4px">CLÁSSICO</span></div>
+              <div class="fr-comp">Brasileirão · R14</div>
+              <div class="fr-tv-line"><strong>TV:</strong> Globo · sportv · Premiere &nbsp;·&nbsp; <strong>Internet:</strong> Globoplay · Cazé TV</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">A def.</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">Maracanã</div></div>
+          </div>
+        </div>
+        <div class="fr">
+          <div class="fr-row">
+            <div class="fr-date-box"><div class="fr-day">06</div><div class="fr-mon">Mai</div></div>
+            <div>
+              <div class="fr-match">Audax Italiano × <strong>Vasco</strong></div>
+              <div class="fr-comp cup">Sul-Americana · Grupo G · R4</div>
+              <div class="fr-tv-line"><strong>TV:</strong> ESPN · Star+ &nbsp;·&nbsp; <strong>Internet:</strong> Disney+</div>
+            </div>
+            <div style="text-align:right"><div style="font-family:var(--mono);font-size:11px;color:var(--white)">19h00</div><div style="font-size:9px;color:var(--subtle);margin-top:2px">Santiago, CHI</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="panel" style="margin-bottom:12px">
+        <div class="panel-head"><span class="panel-title">Resultados 2026</span></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px"><strong>Vasco</strong> × Grêmio</div><div class="fr-comp">BR R8 · 22/03</div></div><span class="res res-w">2–1</span></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px"><strong>Vasco</strong> × Fluminense</div><div class="fr-comp">BR R7 · 18/03</div></div><span class="res res-w">3–2</span></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px"><strong>Vasco</strong> × Cruzeiro</div><div class="fr-comp">BR R6 · 15/03</div></div><span class="res res-d">3–3</span></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px"><strong>Vasco</strong> × Palmeiras</div><div class="fr-comp">BR R5 · 12/03</div></div><span class="res res-w">2–1</span></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px"><strong>Vasco</strong> × Santos</div><div class="fr-comp">BR R4 · 26/02</div></div><span class="res res-l">1–2</span></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px"><strong>Vasco</strong> × Bahia</div><div class="fr-comp">BR R3 · 14/02</div></div><span class="res res-l">0–1</span></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px"><strong>Vasco</strong> × Chapecoense</div><div class="fr-comp">BR R2 · 08/02</div></div><span class="res res-d">1–1</span></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;justify-content:space-between"><div><div class="fr-match" style="font-size:12px">Mirassol × <strong>Vasco</strong></div><div class="fr-comp">BR R1 · 29/01</div></div><span class="res res-l">2–1</span></div></div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">Artilheiros 2026</span></div>
+        <div class="fr"><div style="display:flex;align-items:center;gap:10px"><div class="top-ico hi" style="width:26px;height:26px;font-size:7px">TM</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">Thiago Mendes</div></div><div style="font-family:var(--display);font-size:1rem;color:var(--white)">3</div></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;gap:10px"><div class="top-ico hi" style="width:26px;height:26px;font-size:7px">BA</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">Barros</div></div><div style="font-family:var(--display);font-size:1rem;color:var(--white)">3</div></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;gap:10px"><div class="top-ico hi" style="width:26px;height:26px;font-size:7px">PR</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">Puma Rodríguez</div></div><div style="font-family:var(--display);font-size:1rem;color:var(--white)">3</div></div></div>
+        <div class="fr"><div style="display:flex;align-items:center;gap:10px"><div class="top-ico hi" style="width:26px;height:26px;font-size:7px">SP</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">Spinelli</div></div><div style="font-family:var(--display);font-size:1rem;color:var(--white)">3</div></div></div>
+        <div class="fr" style="border-bottom:none"><div style="display:flex;align-items:center;gap:10px"><div class="top-ico hi" style="width:26px;height:26px;font-size:7px">PC</div><div style="flex:1"><div style="font-size:12px;font-weight:600;color:var(--white)">Ph. Coutinho</div></div><div style="font-family:var(--display);font-size:1rem;color:var(--white)">3</div></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE: TABELA ═══════════════ -->
+<div id="page-tabela" class="page">
+<div class="wrap std-wrap">
+  <div class="section-head" style="padding-top:32px"><span class="section-title">Tabela — Brasileirão 2026</span><span class="section-meta">Atualizado após R8 · 27/03/2026</span></div>
+  <div style="display:grid;grid-template-columns:2fr 1fr;gap:14px;margin-bottom:32px">
+    <div class="panel">
+      <div class="panel-head"><span class="panel-title">Classificação Série A</span></div>
+      <div class="stt-wrap">
+        <table class="stt">
+          <thead><tr><th>#</th><th>Clube</th><th>PJ</th><th>V</th><th>E</th><th>D</th><th>SG</th><th>PTS</th><th>Forma</th></tr></thead>
+          <tbody id="stdBody"></tbody>
+        </table>
+      </div>
+      <div class="stt-legend">
+        <div class="leg-item"><span class="pos-dot plib"></span>Libertadores</div>
+        <div class="leg-item"><span class="pos-dot psul"></span>Sul-Americana</div>
+        <div class="leg-item"><span class="pos-dot preb"></span>Rebaixamento</div>
+      </div>
+    </div>
+    <div>
+      <div class="panel" style="margin-bottom:12px">
+        <div class="panel-head"><span class="panel-title">Sul-Americana · Grupo G</span></div>
+        <table class="stt">
+          <thead><tr><th>Clube</th><th>PJ</th><th>PTS</th></tr></thead>
+          <tbody>
+            <tr class="vr"><td><div class="team-cell"><div class="team-ico vico">VAS</div><span class="team-name vname">Vasco</span></div></td><td>0</td><td class="pts-cell">0</td></tr>
+            <tr><td><div class="team-cell"><div class="team-ico">BAR</div><span class="team-name">Barracas Central</span></div></td><td>0</td><td class="pts-cell">0</td></tr>
+            <tr><td><div class="team-cell"><div class="team-ico">AUD</div><span class="team-name">Audax Italiano</span></div></td><td>0</td><td class="pts-cell">0</td></tr>
+            <tr><td><div class="team-cell"><div class="team-ico">OLI</div><span class="team-name">Olímpia</span></div></td><td>0</td><td class="pts-cell">0</td></tr>
+          </tbody>
+        </table>
+        <div style="padding:8px 12px;font-size:9.5px;color:var(--subtle);border-top:1px solid var(--line)">Estreia: 07/04 · Buenos Aires · ESPN/Disney+</div>
+      </div>
+      <div class="panel">
+        <div class="panel-head"><span class="panel-title">Vasco 2026</span></div>
+        <div class="fr"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11.5px;color:var(--muted)">Posição</span><span style="font-family:var(--display);font-size:1.1rem;color:var(--gold2)">9°</span></div></div>
+        <div class="fr"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11.5px;color:var(--muted)">Pontos</span><span style="font-family:var(--display);font-size:1.1rem;color:var(--white)">11</span></div></div>
+        <div class="fr"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11.5px;color:var(--muted)">Saldo de Gols</span><span style="font-family:var(--display);font-size:1.1rem;color:var(--white)">0</span></div></div>
+        <div class="fr" style="border-bottom:none"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:11.5px;color:var(--muted)">Aproveitamento</span><span style="font-family:var(--display);font-size:1.1rem;color:var(--white)">46%</span></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════ PAGE: HISTÓRIA ═══════════════ -->
+<div id="page-historia" class="page">
+<div class="wrap hist-section">
+  <div class="section-head"><span class="section-title">História</span><span class="section-meta">128 anos · Fundado em 1898 · Pioneiro em 1923</span></div>
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:20px">
+    <div class="kpi"><span class="kpi-val">1898</span><span class="kpi-lbl">Fundação</span><div class="kpi-sub">Bairro da Saúde, RJ</div></div>
+    <div class="kpi"><span class="kpi-val">4</span><span class="kpi-lbl">Brasileiros</span><div class="kpi-sub">1974 · 1989 · 1997 · 2000</div></div>
+    <div class="kpi"><span class="kpi-val">1</span><span class="kpi-lbl">Libertadores</span><div class="kpi-sub">1998 · 4×1 vs Barcelona EQU</div></div>
+  </div>
+  <div class="section-head" style="margin-bottom:14px"><span class="section-title" style="font-size:1.2rem">12 Lendas Vascaínas</span><span class="section-meta">Clique para história completa</span></div>
+  <div class="idols-grid">
+<div class="idol-card" onclick="openIdol('Roberto Dinamite','1971–1993','708~Gols|1.110~Jogos|22~Anos|8~Títulos','Roberto Hélio Dinamite Costa Fernandes marcou 708 gols em mais de 1.100 partidas. O maior artilheiro e ídolo absoluto da história do Vasco da Gama. Ficou 22 anos no clube, chegou a jogar no Barcelona da Espanha e voltou. Sua estátua fica na entrada de São Januário.',0)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg0" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1C1A24"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg0)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Roberto Dinamite</div>
+    <span class="idol-era">1971–1993</span>
+    <div class="idol-desc">708 gols · 1.110 jogos · 22 anos de Vasco. O maior ídolo de todos os tempos.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Romário','4 passagens (1985–2008)','326~Gols|4~Pass.|1998~Lib|2000~BR','O Baixinho marcou 326 gols em 4 passagens. Conquistou a Libertadores 1998 e o Brasileiro 2000. Marcou seu milésimo gol pelo Vasco em 2007.',1)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg1" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1A1820"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg1)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Romário</div>
+    <span class="idol-era">4 passagens (1985–2008)</span>
+    <div class="idol-desc">326 gols em 4 passagens. Libertadores 1998. Gol 1000 em 2007.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Edmundo','1992–2009','138~Gols|5~Pass.|29~Gols 97|1997~BR','Artilheiro do Brasileiro 1997 com 29 gols — maior marca individual do clube. Protagonista da geração da Libertadores 1998.',2)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg2" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1A1822"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg2)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Edmundo</div>
+    <span class="idol-era">1992–2009</span>
+    <div class="idol-desc">O Animal. 138 gols. Artilheiro do Br 1997 com 29 gols.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Juninho Pernambucano','1994–2001','6~Títulos|1998~Lib|1997~BR|Lyon~Depois','Marcou a falta histórica contra o River Plate no Monumental de Núñez nas semifinais da Libertadores 1998. Depois foi ao Lyon virar um dos melhores cobradores de falta do mundo.',3)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg3" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1A1826"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg3)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Juninho Pernambucano</div>
+    <span class="idol-era">1994–2001</span>
+    <div class="idol-desc">A falta histórica no Monumental. Bicampeão pelo Vasco.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Carlos Germano','1990–2005','632~Jogos|1998~Lib|1997~BR|2000~BR','Guardião do Vasco por 15 anos em 632 partidas. Titular na conquista da Copa Libertadores de 1998 e dos Brasileiros de 1997 e 2000.',4)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg4" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#18192A"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg4)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Carlos Germano</div>
+    <span class="idol-era">1990–2005</span>
+    <div class="idol-desc">632 jogos. O goleiro da Libertadores 1998.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Felipe (Maestro)','1994–2004','9~Títulos|1998~Lib|2x~BR|2011~CDP','O lateral com mais títulos pelo Vasco como jogador: 9 conquistas, incluindo Libertadores 1998, Brasileiros de 1997 e 2000 e Copa do Brasil 2011.',5)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg5" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1A1A26"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg5)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Felipe (Maestro)</div>
+    <span class="idol-era">1994–2004</span>
+    <div class="idol-desc">Recordista de títulos: 9 conquistas pelo Vasco.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Barbosa','1945–1960','15~Títulos|431~Jogos|1950~Copa|1948~Sul-Am','Moacyr Barbosa é o maior goleiro da história do Vasco. 15 títulos e 431 jogos. O Centro de Treinamento do clube leva seu nome em sua homenagem.',6)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg6" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#181820"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg6)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Barbosa</div>
+    <span class="idol-era">1945–1960</span>
+    <div class="idol-desc">Maior goleiro vascaíno. 15 títulos. CT leva seu nome.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Ademir de Menezes','1942–1954','301~Gols|9~Gols 50|429~Jogos|4x~Carioca','Marcou 301 gols em 429 jogos. Artilheiro da Copa do Mundo de 1950 com 9 gols. Parte fundamental do Expresso da Vitória.',7)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg7" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1A1A28"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg7)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Ademir de Menezes</div>
+    <span class="idol-era">1942–1954</span>
+    <div class="idol-desc">O Queixada. 301 gols. Artilheiro da Copa 1950.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Bellini','1952–1965','1958~Copa|1962~Copa|Capitão~Seleção|Bic~Mundial','Hideraldo Luiz Bellini foi o capitão da Seleção Brasileira bicampeã em 1958 e 1962, inaugurando a tradição de erguer a taça.',8)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg8" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1A1828"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg8)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Bellini</div>
+    <span class="idol-era">1952–1965</span>
+    <div class="idol-desc">Capitão da Seleção bicampeã 1958 e 1962.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Pedrinho','1993–2006','1998~Lib|1997~BR|2000~BR|Pres~Atual','Roberto de Andrade, o Pedrinho, foi revelado pela base. Conquistou Libertadores 1998 e dois Brasileiros. Hoje é presidente do clube.',9)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg9" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#18181E"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg9)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Pedrinho</div>
+    <span class="idol-era">1993–2006</span>
+    <div class="idol-desc">Ídolo das bases. Libertadores 1998. Atual presidente.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Roberto Dinamite (Jr)','1994–2003','200~Jogos|Fil.~Dinam.|São Jan.~Casa','Seguiu os passos do pai, o maior ídolo da história do Vasco, representando a continuidade da família Dinamite no Gigante da Colina.',10)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg10" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1C1C24"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg10)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Roberto Dinamite (Jr)</div>
+    <span class="idol-era">1994–2003</span>
+    <div class="idol-desc">Filho do maior ídolo. Continuou a tradição vascaína.</div>
+  </div>
+</div>
+<div class="idol-card" onclick="openIdol('Alcir Portela','1963–1975','511~Jogos|1974~BR|0~Expuls.|12~Anos','511 jogos em 12 anos. Peça fundamental no Brasileiro de 1974. Nunca foi expulso em toda a carreira — símbolo de classe e disciplina.',11)">
+  <div class="idol-art"><svg viewBox="0 0 320 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="pg11" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#0E0E14"/><stop offset="100%" stop-color="#1A1A28"/></linearGradient></defs><rect width="320" height="180" fill="url(#pg11)"/><text x="160" y="105" font-family="Bebas Neue,sans-serif" font-size="90" fill="rgba(200,168,75,0.06)" text-anchor="middle" letter-spacing="5">VASCO</text><text x="160" y="130" font-family="Bebas Neue,sans-serif" font-size="12" fill="rgba(200,168,75,0.25)" text-anchor="middle" letter-spacing="4">1898</text></svg></div>
+  <div class="idol-body">
+    <div class="idol-name">Alcir Portela</div>
+    <span class="idol-era">1963–1975</span>
+    <div class="idol-desc">511 jogos. Brasileiro 1974. Nunca expulso.</div>
+  </div>
+</div>
+  </div>
+  <div class="titles-scroll">
+    <div class="titles-track">
+<div class="title-chip"><b>1923</b> Carioca</div>
+<div class="title-chip"><b>1948</b> Sul-Am. Clubes</div>
+<div class="title-chip"><b>1950</b> Carioca</div>
+<div class="title-chip"><b>1974</b> Brasileiro</div>
+<div class="title-chip"><b>1989</b> Brasileiro</div>
+<div class="title-chip"><b>1992</b> Carioca</div>
+<div class="title-chip"><b>1993</b> Carioca</div>
+<div class="title-chip"><b>1994</b> Carioca</div>
+<div class="title-chip"><b>1997</b> Brasileiro</div>
+<div class="title-chip"><b>1997</b> Carioca</div>
+<div class="title-chip"><b>1998</b> Libertadores</div>
+<div class="title-chip"><b>1998</b> Carioca</div>
+<div class="title-chip"><b>1999</b> Rio-SP</div>
+<div class="title-chip"><b>2000</b> Brasileiro</div>
+<div class="title-chip"><b>2000</b> Copa Mercosul</div>
+<div class="title-chip"><b>2003</b> Carioca</div>
+<div class="title-chip"><b>2011</b> Copa do Brasil</div>
+<div class="title-chip"><b>2016</b> Carioca</div>
+<div class="title-chip"><b>2019</b> Carioca</div>
+<div class="title-chip"><b>1923</b> Carioca</div>
+<div class="title-chip"><b>1948</b> Sul-Am. Clubes</div>
+<div class="title-chip"><b>1950</b> Carioca</div>
+<div class="title-chip"><b>1974</b> Brasileiro</div>
+<div class="title-chip"><b>1989</b> Brasileiro</div>
+<div class="title-chip"><b>1992</b> Carioca</div>
+<div class="title-chip"><b>1993</b> Carioca</div>
+<div class="title-chip"><b>1994</b> Carioca</div>
+<div class="title-chip"><b>1997</b> Brasileiro</div>
+<div class="title-chip"><b>1997</b> Carioca</div>
+<div class="title-chip"><b>1998</b> Libertadores</div>
+<div class="title-chip"><b>1998</b> Carioca</div>
+<div class="title-chip"><b>1999</b> Rio-SP</div>
+<div class="title-chip"><b>2000</b> Brasileiro</div>
+<div class="title-chip"><b>2000</b> Copa Mercosul</div>
+<div class="title-chip"><b>2003</b> Carioca</div>
+<div class="title-chip"><b>2011</b> Copa do Brasil</div>
+<div class="title-chip"><b>2016</b> Carioca</div>
+<div class="title-chip"><b>2019</b> Carioca</div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- ═══════════════ PAGE: ESTATÍSTICAS ═══════════════ -->
+<div id="page-estatisticas" class="page">
+<div class="wrap stats-section">
+  <div class="section-head"><span class="section-title">Estatísticas</span><span class="section-meta">Dados históricos verificados</span></div>
+  <div class="kpi-grid">
+    <div class="kpi"><span class="kpi-val">708</span><span class="kpi-lbl">Gols — Dinamite</span><div class="kpi-sub">Maior artilheiro histórico</div></div>
+    <div class="kpi"><span class="kpi-val">1.110</span><span class="kpi-lbl">Jogos — Dinamite</span><div class="kpi-sub">Mais jogos na história</div></div>
+    <div class="kpi"><span class="kpi-val">24+</span><span class="kpi-lbl">Títulos Cariocas</span><div class="kpi-sub">Desde 1923</div></div>
+    <div class="kpi"><span class="kpi-val">128</span><span class="kpi-lbl">Anos de História</span><div class="kpi-sub">1898 → 2026</div></div>
+  </div>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-head">Posição no Brasileirão (seleção)</div><div class="stat-body"><div class="chart-h"><canvas id="chartPos"></canvas></div></div></div>
+    <div class="stat-card"><div class="stat-head">Títulos por Competição</div><div class="stat-body"><div class="chart-h"><canvas id="chartTit"></canvas></div></div></div>
+    <div class="stat-card"><div class="stat-head">Top 10 Artilheiros Históricos</div>
+      <div class="stat-body"><div class="top-list">
+        <div class="top-row"><span class="top-rank r1">1</span><div class="top-ico hi">RD</div><div class="top-info"><div class="top-name">Roberto Dinamite</div><div class="top-det">1971–1993</div></div><span class="top-val">708</span><div class="top-bar-w"><div class="top-bar-f" style="width:100%"></div></div></div>
+        <div class="top-row"><span class="top-rank r2">2</span><div class="top-ico hi">RO</div><div class="top-info"><div class="top-name">Romário</div><div class="top-det">4 passagens</div></div><span class="top-val">326</span><div class="top-bar-w"><div class="top-bar-f" style="width:46%"></div></div></div>
+        <div class="top-row"><span class="top-rank">3</span><div class="top-ico">AD</div><div class="top-info"><div class="top-name">Ademir de Menezes</div><div class="top-det">1942–1954</div></div><span class="top-val">301</span><div class="top-bar-w"><div class="top-bar-f" style="width:42%"></div></div></div>
+        <div class="top-row"><span class="top-rank">4</span><div class="top-ico">PI</div><div class="top-info"><div class="top-name">Pinga</div><div class="top-det">Anos 1940–50</div></div><span class="top-val">250</span><div class="top-bar-w"><div class="top-bar-f" style="width:35%"></div></div></div>
+        <div class="top-row"><span class="top-rank">5</span><div class="top-ico">RU</div><div class="top-info"><div class="top-name">Russinho</div><div class="top-det">Década 1950</div></div><span class="top-val">230</span><div class="top-bar-w"><div class="top-bar-f" style="width:32%"></div></div></div>
+        <div class="top-row"><span class="top-rank">6</span><div class="top-ico">VA</div><div class="top-info"><div class="top-name">Vavá</div><div class="top-det">1952–1960</div></div><span class="top-val">191</span><div class="top-bar-w"><div class="top-bar-f" style="width:27%"></div></div></div>
+        <div class="top-row"><span class="top-rank">7</span><div class="top-ico">ED</div><div class="top-info"><div class="top-name">Edmundo</div><div class="top-det">5 passagens</div></div><span class="top-val">138</span><div class="top-bar-w"><div class="top-bar-f" style="width:19%"></div></div></div>
+        <div class="top-row"><span class="top-rank">8</span><div class="top-ico">RM</div><div class="top-info"><div class="top-name">Ramón</div><div class="top-det">Anos 1990</div></div><span class="top-val">96</span><div class="top-bar-w"><div class="top-bar-f" style="width:13%"></div></div></div>
+        <div class="top-row"><span class="top-rank">9</span><div class="top-ico">PV</div><div class="top-info"><div class="top-name">Pablo Vegetti</div><div class="top-det">2022–</div></div><span class="top-val">60</span><div class="top-bar-w"><div class="top-bar-f" style="width:8%"></div></div></div>
+      </div></div>
+    </div>
+    <div class="stat-card" style="grid-column:span 1"><div class="stat-head">Mais Partidas</div>
+      <div class="stat-body"><div class="top-list">
+        <div class="top-row"><span class="top-rank r1">1</span><div class="top-ico hi">RD</div><div class="top-info"><div class="top-name">Roberto Dinamite</div><div class="top-det">Atacante · 22 anos</div></div><span class="top-val">1.110</span><div class="top-bar-w"><div class="top-bar-f" style="width:100%"></div></div></div>
+        <div class="top-row"><span class="top-rank r2">2</span><div class="top-ico">CG</div><div class="top-info"><div class="top-name">Carlos Germano</div><div class="top-det">Goleiro · 15 anos</div></div><span class="top-val">632</span><div class="top-bar-w"><div class="top-bar-f" style="width:57%"></div></div></div>
+        <div class="top-row"><span class="top-rank">3</span><div class="top-ico">AL</div><div class="top-info"><div class="top-name">Alcir Portela</div><div class="top-det">Meia · 12 anos</div></div><span class="top-val">511</span><div class="top-bar-w"><div class="top-bar-f" style="width:46%"></div></div></div>
+        <div class="top-row"><span class="top-rank">4</span><div class="top-ico">BA</div><div class="top-info"><div class="top-name">Barbosa</div><div class="top-det">Goleiro · 15 anos</div></div><span class="top-val">431</span><div class="top-bar-w"><div class="top-bar-f" style="width:38%"></div></div></div>
+        <div class="top-row"><span class="top-rank">5</span><div class="top-ico">FL</div><div class="top-info"><div class="top-name">Felipe (Maestro)</div><div class="top-det">Lateral</div></div><span class="top-val">386</span><div class="top-bar-w"><div class="top-bar-f" style="width:34%"></div></div></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE: PESQUISAS ═══════════════ -->
+<div id="page-pesquisas" class="page">
+<div class="wrap polls-section">
+  <div class="section-head"><span class="section-title">Pesquisas Semanais</span><span class="section-meta">Nova pesquisa toda segunda · Resultado imediato · Publicado como notícia 2×/semana</span></div>
+  <div style="background:var(--goldfade);border:1px solid rgba(200,168,75,.2);border-radius:var(--r);padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+    <span style="font-size:16px">📊</span>
+    <div style="flex:1"><div style="font-family:var(--display);font-size:.82rem;letter-spacing:1px;color:var(--gold2)">Semana 14 · Abr 2026</div><div style="font-size:11.5px;color:var(--muted)">Resultados parciais nas quartas e finais aos domingos como notícia automática.</div></div>
+    <button class="btn btn-gold" style="font-size:11px" onclick="goPage('newsletter')">📧 Receber Resultados</button>
+  </div>
+  <div class="polls-grid" id="pollsGrid"></div>
+  <div style="margin-top:24px">
+    <div class="section-head"><span class="section-title" style="font-size:1.1rem">Pesquisas Encerradas</span></div>
+    <div class="polls-grid" id="closedPollsGrid"></div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE: QUIZ ═══════════════ -->
+<div id="page-quiz" class="page">
+<div class="wrap quiz-section">
+  <div id="qHome">
+    <div class="q-home">
+      <div class="section-head" style="justify-content:center;margin-bottom:6px"><span class="section-title">Quiz Vascaíno</span></div>
+      <p style="font-size:13.5px;color:var(--muted);margin-bottom:20px">300 perguntas verificadas · 5 categorias · 20 segundos por questão</p>
+      <div class="q-cats">
+        <div class="q-cat" onclick="startQuiz('historia')"><span class="q-cat-icon">⏳</span><span class="q-cat-name">História</span><span class="q-cat-count">60 perguntas</span></div>
+        <div class="q-cat" onclick="startQuiz('titulos')"><span class="q-cat-icon">🏆</span><span class="q-cat-name">Títulos</span><span class="q-cat-count">60 perguntas</span></div>
+        <div class="q-cat" onclick="startQuiz('idolos')"><span class="q-cat-icon">⭐</span><span class="q-cat-name">Ídolos</span><span class="q-cat-count">60 perguntas</span></div>
+        <div class="q-cat" onclick="startQuiz('futebol')"><span class="q-cat-icon">⚽</span><span class="q-cat-name">Futebol 2026</span><span class="q-cat-count">60 perguntas</span></div>
+        <div class="q-cat" onclick="startQuiz('curiosidades')"><span class="q-cat-icon">💡</span><span class="q-cat-name">Curiosidades</span><span class="q-cat-count">60 perguntas</span></div>
+        <div class="q-cat featured" onclick="startQuiz('todos')"><span class="q-cat-icon">⚓</span><span class="q-cat-name" style="color:var(--gold2)">Aleatório!</span><span class="q-cat-count">Tudo misturado</span></div>
+      </div>
+    </div>
+  </div>
+  <div id="qGame" style="display:none">
+    <div class="q-game">
+      <div class="qprog"><div class="qpf" id="qProg"></div></div>
+      <div class="q-bar"><span class="q-num" id="qNum">1/20</span><span class="q-score-d" id="qScoreD">0 pts</span><span class="q-timer" id="qTimer">⏱ 20</span></div>
+      <div class="q-box">
+        <div class="q-cat-tag" id="qCatTag"></div>
+        <div class="q-txt" id="qTxt"></div>
+        <div class="q-opts" id="qOpts"></div>
+        <div class="q-fb" id="qFb"></div>
+        <div class="q-next" id="qNextBtn"><button class="btn btn-gold" onclick="nextQ()">Próxima →</button></div>
+      </div>
+    </div>
+  </div>
+  <div id="qResult" style="display:none">
+    <div class="q-result">
+      <div class="section-title" style="margin-bottom:12px">Resultado Final!</div>
+      <span id="qrScore" style="font-family:var(--display);font-size:4rem;color:var(--gold2);display:block;line-height:1;margin-bottom:6px">0</span>
+      <span id="qrTotal" style="font-size:12px;color:var(--muted);display:block;margin-bottom:14px"></span>
+      <div id="qrGrade" style="font-family:var(--display);font-size:1.2rem;letter-spacing:2px;color:var(--white);margin-bottom:12px"></div>
+      <div id="qrBar" style="height:4px;background:var(--ink3);border-radius:2px;overflow:hidden;margin-bottom:18px"><div id="qrFill" style="height:100%;border-radius:2px;transition:width 1s ease"></div></div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-gold" onclick="startQuiz(window._qCat)">Jogar Novamente</button>
+        <button class="btn btn-ghost" onclick="showQHome()">Escolher Categoria</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE: NEWSLETTER ═══════════════ -->
+<div id="page-newsletter" class="page">
+<div class="wrap nl-section">
+  <div class="section-head"><span class="section-title">Newsletter</span><span class="section-meta">Boletim diário · Gerado com Claude AI · Enviado via Brevo</span></div>
+  <div class="nl-card">
+    <div class="nl-grid">
+      <div>
+        <div style="font-family:var(--serif);font-size:1.5rem;font-weight:900;color:var(--white);margin-bottom:6px">Boletim Diário Vascaíno</div>
+        <p style="font-size:13px;color:var(--muted);line-height:1.75;margin-bottom:4px">Todo dia às 8h: notícias, próximo jogo, resultado anterior, pesquisa da semana e quiz exclusivo.</p>
+        <div class="nl-feats">
+          <div class="nl-feat"><span class="nl-feat-icon">⏰</span><span><strong>Todo dia às 8h</strong> — Boletim automático gerado com Claude AI</span></div>
+          <div class="nl-feat"><span class="nl-feat-icon">⚽</span><span><strong>Todos os esportes</strong> — Futebol, basquete, remo, beach soccer</span></div>
+          <div class="nl-feat"><span class="nl-feat-icon">📊</span><span><strong>Pesquisa da semana</strong> — Resultados e nova enquete toda segunda</span></div>
+          <div class="nl-feat"><span class="nl-feat-icon">🏆</span><span><strong>Quiz do dia</strong> — Pergunta exclusiva para assinantes</span></div>
+          <div class="nl-feat"><span class="nl-feat-icon">🔒</span><span><strong>Gratuito</strong> — Sem spam · Cancelamento simples a qualquer hora</span></div>
+        </div>
+        <div style="background:var(--goldfade);border:1px solid rgba(200,168,75,.2);border-radius:var(--r);padding:12px 14px">
+          <div style="font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);margin-bottom:6px;font-weight:600">PREVIEW DO BOLETIM</div>
+          <div style="font-size:11.5px;color:var(--muted);line-height:1.8">
+            <div>⚽ <strong style="color:var(--white)">HOJE:</strong> Coritiba × Vasco — 20h30 — sportv</div>
+            <div>📢 <strong style="color:var(--white)">DESTAQUE:</strong> Gomez suspenso, Marino titular</div>
+            <div>📊 <strong style="color:var(--white)">PESQUISA:</strong> Avalie Renato Gaúcho</div>
+            <div>🏆 <strong style="color:var(--white)">QUIZ:</strong> Placar da Libertadores 1998?</div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="nl-form-box">
+          <div class="nl-form-title">✉ Cadastrar</div>
+          <label class="nl-lbl">Seu nome</label>
+          <input type="text" class="nl-inp" id="nlName" placeholder="Ex: João Vascaíno">
+          <label class="nl-lbl">Seu e-mail</label>
+          <input type="email" class="nl-inp" id="nlEmail" placeholder="seu@email.com">
+          <label class="nl-lbl">Frequência</label>
+          <select class="nl-sel" id="nlFreq">
+            <option value="diario">⏰ Diário às 8h (recomendado)</option>
+            <option value="semanal">📅 Apenas nas segundas-feiras</option>
+            <option value="jogos">⚽ Só nos dias de jogo</option>
+          </select>
+          <div id="nlMsg" class="nl-msg"></div>
+          <button class="btn btn-gold" onclick="submitNl()" style="width:100%;justify-content:center;margin-top:6px">✉ Quero Receber</button>
+        </div>
+        <div class="nl-counter">
+          <span class="nl-count" id="nlCount">247</span>
+          <span class="nl-count-lbl">Vascaínos inscritos</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════ PAGE: SOBRE ═══════════════ -->
+<div id="page-sobre" class="page">
+<div class="wrap sobre-section">
+  <div class="section-head"><span class="section-title">Sobre</span></div>
+  <div class="sobre-grid">
+    <div>
+      <div class="sobre-block" style="margin-bottom:12px">
+        <div class="sobre-title">⚓ IA Vasco News</div>
+        <div class="sobre-text">O <strong>primeiro portal com inteligência artificial</strong> do Vasco da Gama. Fan site independente — notícias geradas por Claude AI (Anthropic) a cada 10 minutos, cobrindo todos os esportes do clube.</div>
+        <div class="feature-list">
+          <div class="feat">Notícias atualizadas automaticamente a cada 10 minutos com Claude AI</div>
+          <div class="feat">Twitter/X e Instagram @vascodagama como fontes citadas</div>
+          <div class="feat">Pesquisas semanais com resultado imediato, publicado como notícia</div>
+          <div class="feat">Newsletter diária às 8h gerada com Claude AI via Brevo</div>
+          <div class="feat">Calendário com transmissão TV e internet de cada jogo</div>
+          <div class="feat">Quiz com 300 perguntas verificadas em 5 categorias</div>
+          <div class="feat">Resultados e dados conferidos em vaskipedia.com e vasco.com.br</div>
+        </div>
+      </div>
+      <div class="sobre-block">
+        <div class="sobre-title">⚠ Aviso</div>
+        <div class="sobre-text">Fan site <strong>não oficial</strong>. Sem vínculo com o Club de Regatas Vasco da Gama. Logotipos e marcas são propriedade do clube. Motor de IA: <strong>Claude (Anthropic)</strong>. Newsletter: <strong>Brevo</strong>.</div>
+      </div>
+    </div>
+    <div>
+      <div class="sobre-block">
+        <div class="sobre-title">📰 Fontes</div>
+        <div class="source-list">
+          <div class="source-row"><div class="source-dot"></div>netvasco.com.br</div>
+          <div class="source-row"><div class="source-dot"></div>supervasco.com</div>
+          <div class="source-row"><div class="source-dot"></div>vasco.com.br</div>
+          <div class="source-row"><div class="source-dot"></div>crvascodagama.com</div>
+          <div class="source-row"><div class="source-dot"></div>ge.globo.com</div>
+          <div class="source-row"><div class="source-dot"></div>lance.com.br</div>
+          <div class="source-row social"><div class="source-dot"></div>@vascodagama · Twitter/X</div>
+          <div class="source-row social"><div class="source-dot"></div>@vascodagama · Instagram</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+
+<!-- CHATBOT -->
+<div class="chat-widget">
+  <div class="chat-panel" id="chatPanel">
+    <div class="ch-head">
+      <div class="ch-av">⚓</div>
+      <div class="ch-inf"><h4>Assistente IA</h4><p><span class="ch-on"></span> Claude AI</p></div>
+      <span class="ch-close" onclick="toggleChat()">✕</span>
+    </div>
+    <div class="ch-msgs" id="chatMsgs">
+      <div class="ch-msg bot"><div class="ch-bubble">⚓ <strong>Gigante!</strong><br><br>Sou o assistente IA do Vasco. Posso ajudar com notícias, jogos, tabela, história e quiz!</div><div class="ch-ts">agora</div></div>
+      <div class="ch-typing" id="chatTyping"><div class="td"></div><div class="td"></div><div class="td"></div></div>
+    </div>
+    <div class="ch-suggs">
+      <button class="ch-sg" onclick="sendSugg(this)">Próximo jogo</button>
+      <button class="ch-sg" onclick="sendSugg(this)">Tabela agora</button>
+      <button class="ch-sg" onclick="sendSugg(this)">Basquete hoje</button>
+      <button class="ch-sg" onclick="sendSugg(this)">Títulos</button>
+    </div>
+    <div class="ch-input-row">
+      <input type="text" class="ch-inp" id="chatInp" placeholder="Pergunte sobre o Vasco..." maxlength="200">
+      <button class="ch-send" onclick="sendChat()">↑</button>
+    </div>
+    <div class="ch-fn">Fan site · Claude AI · Não oficial</div>
+  </div>
+  <div class="chat-btn" onclick="toggleChat()">⚓<div class="chat-badge">1</div></div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="ft-grid">
+      <div>
+        <span class="ft-brand-name">IA VASCO NEWS</span>
+        <span class="ft-brand-sub">Fan Site · Gigante da Colina · 1898</span>
+        <p class="ft-desc">O primeiro portal com inteligência artificial do Vasco da Gama. Notícias ao vivo, todos os esportes, quiz, pesquisas e newsletter diária.</p>
+      </div>
+      <div class="ft-col"><h4>Páginas</h4><ul>
+        <li><span onclick="goPage('inicio')">Notícias IA</span></li>
+        <li><span onclick="goPage('jogos')">Jogos 2026</span></li>
+        <li><span onclick="goPage('tabela')">Tabela</span></li>
+        <li><span onclick="goPage('historia')">História</span></li>
+        <li><span onclick="goPage('estatisticas')">Estatísticas</span></li>
+        <li><span onclick="goPage('pesquisas')">Pesquisas</span></li>
+        <li><span onclick="goPage('quiz')">Quiz 300</span></li>
+        <li><span onclick="goPage('newsletter')">Newsletter</span></li>
+        <li><span onclick="goPage('sobre')">Sobre</span></li>
+      </ul></div>
+      <div class="ft-col"><h4>Fontes</h4><ul>
+        <li><a href="https://www.netvasco.com.br" target="_blank" rel="noopener">NetVasco</a></li>
+        <li><a href="https://www.supervasco.com" target="_blank" rel="noopener">SuperVasco</a></li>
+        <li><a href="https://vasco.com.br" target="_blank" rel="noopener">Vasco Oficial</a></li>
+        <li><a href="https://crvascodagama.com" target="_blank" rel="noopener">CRVasco</a></li>
+        <li><a href="https://ge.globo.com/futebol/times/vasco/" target="_blank" rel="noopener">GE Globo</a></li>
+        <li><a href="https://www.lance.com.br/vasco/" target="_blank" rel="noopener">Lance!</a></li>
+      </ul></div>
+      <div class="ft-col"><h4>Redes do Vasco</h4><ul>
+        <li><a href="https://www.instagram.com/vascodagama/" target="_blank" rel="noopener">Instagram</a></li>
+        <li><a href="https://twitter.com/VascodaGama" target="_blank" rel="noopener">Twitter / X</a></li>
+        <li><a href="https://www.youtube.com/@vascodagama" target="_blank" rel="noopener">YouTube</a></li>
+        <li><a href="https://www.facebook.com/VascodaGama" target="_blank" rel="noopener">Facebook</a></li>
+        <li><a href="https://www.tiktok.com/@vascodagama" target="_blank" rel="noopener">TikTok</a></li>
+      </ul></div>
+    </div>
+    <div class="ft-bottom">
+      <div>
+        <div class="ft-copy">© 2026 IA Vasco News · Fan site não oficial · Logotipos: propriedade do CR Vasco da Gama.</div>
+        <div class="ft-copy">Títulos verificados: Brasileiro 1974, 1989, 1997, 2000. Dados: vaskipedia.com + vasco.com.br. Motor IA: Claude (Anthropic).</div>
+      </div>
+      <div class="ft-socials">
+        <a href="https://www.instagram.com/vascodagama/" target="_blank" rel="noopener" class="ft-soc">📸</a>
+        <a href="https://twitter.com/VascodaGama" target="_blank" rel="noopener" class="ft-soc">🐦</a>
+        <a href="https://www.youtube.com/@vascodagama" target="_blank" rel="noopener" class="ft-soc">▶</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+
+<script>
+// ═══════════════════════════════════════════════════════
+//  IA VASCO NEWS  —  JavaScript
+// ═══════════════════════════════════════════════════════
+
+// ── DATA ──────────────────────────────────────────────
+const STD = [
+  {p:1,t:'Palmeiras',ab:'PAL',pj:8,v:5,e:2,d:1,sg:8,pts:17,form:['W','W','D','W','W'],lib:1},
+  {p:2,t:'Flamengo',ab:'FLA',pj:8,v:5,e:1,d:2,sg:6,pts:16,form:['W','D','W','W','L'],lib:1},
+  {p:3,t:'Atlético-MG',ab:'CAM',pj:8,v:5,e:0,d:3,sg:3,pts:15,form:['W','W','L','W','L'],lib:1},
+  {p:4,t:'Corinthians',ab:'COR',pj:8,v:4,e:2,d:2,sg:3,pts:14,form:['W','W','D','L','W'],lib:1},
+  {p:5,t:'São Paulo',ab:'SAO',pj:8,v:4,e:1,d:3,sg:1,pts:13,form:['W','L','W','D','W'],lib:1},
+  {p:6,t:'Fluminense',ab:'FLU',pj:8,v:3,e:3,d:2,sg:1,pts:12,form:['D','W','L','D','W'],lib:1},
+  {p:7,t:'Internacional',ab:'INT',pj:8,v:3,e:2,d:3,sg:0,pts:11,form:['W','D','L','W','L'],sul:1},
+  {p:8,t:'Athletico-PR',ab:'CAP',pj:8,v:3,e:2,d:3,sg:0,pts:11,form:['D','W','L','W','L'],sul:1},
+  {p:9,t:'Vasco',ab:'VAS',pj:8,v:3,e:2,d:3,sg:0,pts:11,form:['L','D','W','W','W'],sul:1,vasco:1},
+  {p:10,t:'RB Bragantino',ab:'RBB',pj:8,v:3,e:1,d:4,sg:-1,pts:10,form:['W','L','W','D','L'],sul:1},
+  {p:11,t:'Botafogo',ab:'BOT',pj:8,v:2,e:3,d:3,sg:-1,pts:9,form:['D','L','W','D','L'],sul:1},
+  {p:12,t:'Cruzeiro',ab:'CRU',pj:8,v:2,e:3,d:3,sg:-2,pts:9,form:['D','L','D','W','D'],sul:1},
+  {p:13,t:'Grêmio',ab:'GRE',pj:8,v:2,e:2,d:4,sg:-3,pts:8,form:['L','W','D','L','L']},
+  {p:14,t:'América-MG',ab:'AME',pj:8,v:2,e:1,d:5,sg:-4,pts:7,form:['L','W','L','L','D']},
+  {p:15,t:'Coritiba',ab:'CFC',pj:8,v:2,e:0,d:6,sg:-7,pts:6,form:['L','L','W','L','L']},
+  {p:16,t:'Cuiabá',ab:'CUI',pj:8,v:1,e:3,d:4,sg:-5,pts:6,form:['D','L','D','L','W'],reb:1},
+  {p:17,t:'Chapecoense',ab:'CHP',pj:8,v:1,e:2,d:5,sg:-7,pts:5,form:['L','D','L','L','W'],reb:1},
+  {p:18,t:'Remo',ab:'REM',pj:8,v:1,e:1,d:6,sg:-8,pts:4,form:['L','L','W','L','L'],reb:1},
+  {p:19,t:'Mirassol',ab:'MIR',pj:8,v:1,e:1,d:6,sg:-8,pts:4,form:['L','W','L','L','L'],reb:1},
+  {p:20,t:'Avaí',ab:'AVA',pj:8,v:0,e:2,d:6,sg:-10,pts:2,form:['D','L','L','D','L'],reb:1},
+];
+
+const POLLS = [
+  {id:'w14p1',q:'Como você avalia o Vasco no Brasileirão 2026?',opts:['Excelente','Bom','Regular','Fraco'],w:14},
+  {id:'w14p2',q:'Renato Gaúcho está fazendo um bom trabalho?',opts:['Sim, ótimo','Sim, bom','Regular','Não ainda'],w:14},
+  {id:'w14p3',q:'SAF com Lamacchia seria boa para o Vasco?',opts:['Sim, muito boa','Sim, talvez','Não sei','Não seria boa'],w:14},
+  {id:'w14p4',q:'Melhor jogador do Vasco em 2026?',opts:['Cuiabano','Ph. Coutinho','Thiago Mendes','Andres Gomez'],w:14},
+  {id:'w14p5',q:'Até onde o Vasco vai na Sul-Americana?',opts:['Campeão','Finalista','Semifinalista','Fase de Grupos'],w:14},
+  {id:'w14p6',q:'Resultado do Fla × Vasco em 03/05?',opts:['Vitória do Vasco','Empate','Derrota do Vasco','Não sei'],w:14},
+];
+
+const CLOSED_POLLS = [
+  {id:'w13p1',q:'Vasco vai vencer o Grêmio?',opts:['Sim, com folga','Sim, por pouco','Empate','Derrota'],votes:[120,340,210,130],w:13,closed:1,result:'Vitória 2×1! 40% apostou certo.'},
+  {id:'w13p2',q:'Renato Gaúcho foi boa contratação?',opts:['Sim, ótimo','Sim, bom','Cedo para dizer','Não'],votes:[280,420,310,90],w:13,closed:1,result:'73% aprovam Renato.'},
+];
+
+const QUIZ = {
+  historia:[
+    {q:'Em que ano foi fundado o CR Vasco da Gama?',o:['1896','1898','1900','1902'],a:1,e:'Fundado em 21 de agosto de 1898 no bairro da Saúde, Rio de Janeiro.'},
+    {q:'Qual o feito pioneiro do Vasco em 1923?',o:['Primeiro estádio','1º a incluir jogadores negros','1º título nacional','1º feminino'],a:1,e:'Em 1923, o Vasco incluiu jogadores negros no time, pioneiro no futebol carioca.'},
+    {q:'Qual o apelido mais famoso do Vasco?',o:['Gigante do Norte','Gigante da Colina','Colosso Suburbano','Estrela Solitária'],a:1,e:'Gigante da Colina — referência ao morro de São Januário.'},
+    {q:'Em que bairro fica o Estádio São Januário?',o:['Madureira','São Cristóvão','Tijuca','Barra'],a:1,e:'São Januário fica no bairro de São Cristóvão, Zona Norte do Rio.'},
+    {q:'Qual a origem do nome "Vasco da Gama"?',o:['Fundador','Navegador português','Rua da cidade','Personagem literário'],a:1,e:'Homenagem ao navegador que descobriu o caminho marítimo para as Índias em 1498.'},
+    {q:'Quantos Campeonatos Brasileiros o Vasco tem?',o:['3','4','5','6'],a:1,e:'4 Brasileiros: 1974, 1989, 1997 e 2000.'},
+    {q:'Em que ano o Vasco conquistou a Copa Libertadores?',o:['1996','1997','1998','1999'],a:2,e:'Copa Libertadores 1998.'},
+    {q:'Contra quem foi a final da Libertadores 1998?',o:['Olímpia','Boca Juniors','Barcelona de Guayaquil','River Plate'],a:2,e:'Vasco 4×1 Barcelona de Guayaquil no agregado.'},
+    {q:'Qual o placar agregado da final da Libertadores 1998?',o:['3×1','4×1','5×2','2×0'],a:1,e:'4×1 para o Vasco.'},
+    {q:'Em que ano o Vasco ganhou a Copa do Brasil?',o:['2009','2010','2011','2012'],a:2,e:'Copa do Brasil 2011, contra o Coritiba.'},
+    {q:'Quantos anos tem o Vasco em 2026?',o:['126','127','128','129'],a:2,e:'Fundado em 1898, o Vasco completa 128 anos em 2026.'},
+    {q:'Qual torneio continental o Vasco venceu em 1948?',o:['Libertadores','Copa Sul-Americana de Clubes','Copa Mercosul','Copa do Brasil'],a:1,e:'A Copa Sul-Americana de Clubes de 1948.'},
+    {q:'O CT do Vasco leva o nome de qual ídolo?',o:['Dinamite','Romário','Barbosa','Edmundo'],a:2,e:'CT Moacyr Barbosa — homenagem ao maior goleiro da história do clube.'},
+    {q:'O Vasco representou o Brasil em qual Olimpíada?',o:['1948','1952','1956','1960'],a:1,e:'O Vasco representou o Brasil nas Olímpiadas de Helsinque 1952.'},
+    {q:'Qual o símbolo principal do escudo do Vasco?',o:['Cruz de Malta','Âncora','Estrela','Nau'],a:1,e:'A âncora — símbolo dos clubes de remo e da tradição marítima portuguesa.'},
+  ],
+  titulos:[
+    {q:'Qual o primeiro Campeonato Brasileiro do Vasco?',o:['1970','1972','1974','1976'],a:2,e:'O primeiro Brasileiro foi em 1974.'},
+    {q:'Qual o segundo Brasileiro do Vasco?',o:['1985','1987','1989','1991'],a:2,e:'O segundo foi em 1989.'},
+    {q:'Quando o Vasco venceu a Copa Mercosul?',o:['1999','2000','2001','2002'],a:1,e:'Copa Mercosul 2000, batendo o Palmeiras na final.'},
+    {q:'O Vasco é campeão do Torneio Rio-SP? Em que ano?',o:['Não','1997','1999','2001'],a:2,e:'O Vasco conquistou o Torneio Rio-São Paulo em 1999.'},
+    {q:'Qual o último Brasileiro do Vasco?',o:['1997','1998','2000','2003'],a:2,e:'O último Brasileiro do Vasco foi em 2000.'},
+    {q:'Contra quem foi a final da Copa do Brasil 2011?',o:['Palmeiras','Fluminense','Coritiba','Santos'],a:2,e:'Vasco venceu o Coritiba na final.'},
+    {q:'Quantos Cariocas o Vasco tem aproximadamente?',o:['18','21','24+','30'],a:2,e:'Mais de 24 títulos do Campeonato Carioca.'},
+    {q:'O Vasco 2000 foi campeão de quais competições?',o:['BR e Copa do Brasil','BR e Copa Mercosul','Libertadores e BR','Lib e Copa do Brasil'],a:1,e:'Em 2000: Brasileirão e Copa Mercosul.'},
+    {q:'Em que estádio o Vasco joga como mandante?',o:['Maracanã','Nilton Santos','São Januário','Raulino de Oliveira'],a:2,e:'São Januário, em São Cristóvão.'},
+    {q:'Edmundo foi artilheiro do Brasileirão em qual ano?',o:['1995','1996','1997','1998'],a:2,e:'Artilheiro em 1997 com 29 gols.'},
+  ],
+  idolos:[
+    {q:'Quantos gols Dinamite marcou pelo Vasco?',o:['608','658','708','758'],a:2,e:'708 gols em mais de 1.100 jogos.'},
+    {q:'Quantas passagens Romário teve pelo Vasco?',o:['2','3','4','5'],a:2,e:'4 passagens, 326 gols no total.'},
+    {q:'Qual jogador ficou conhecido como "o Maestro"?',o:['Juninho','Felipe','Pedrinho','Edmundo'],a:1,e:'Felipe, o lateral que conquistou 9 títulos pelo Vasco.'},
+    {q:'Quantos jogos Carlos Germano fez pelo Vasco?',o:['450','511','632','700'],a:2,e:'632 partidas em 15 anos.'},
+    {q:'Quem marcou a falta histórica vs River na Lib 1998?',o:['Edmundo','Juninho Pernambucano','Romário','Felipe'],a:1,e:'Juninho no Monumental de Núñez, semifinais da Libertadores.'},
+    {q:'Quantos títulos Felipe conquistou pelo Vasco?',o:['6','7','8','9'],a:3,e:'9 títulos — recorde de jogador.'},
+    {q:'Qual artilheiro histórico virou presidente do clube?',o:['Dinamite','Romário','Pedrinho','Edmundo'],a:2,e:'Pedrinho (Roberto de Andrade) é o atual presidente.'},
+    {q:'Qual era o apelido de Edmundo?',o:['O Fenômeno','O Animal','O Craque','O Baixinho'],a:1,e:'Edmundo = "O Animal".'},
+    {q:'Quem foi artilheiro da Copa 1950 jogando no Vasco?',o:['Barbosa','Vavá','Pinga','Ademir de Menezes'],a:3,e:'Ademir de Menezes, o Queixada, foi artilheiro com 9 gols.'},
+    {q:'Qual capitão da Seleção bicampeã (1958/62) jogou no Vasco?',o:['Barbosa','Bellini','Mauro Galvão','Valdir Peres'],a:1,e:'Bellini foi capitão bicampeão e jogou no Vasco.'},
+    {q:'Quantos gols Pablo Vegetti tem no histórico do Vasco?',o:['45','55','60','70'],a:2,e:'60 gols — entre os maiores artilheiros.'},
+    {q:'Roberto Dinamite chegou a jogar em qual clube europeu?',o:['Real Madrid','Barcelona','Juventus','Ajax'],a:1,e:'Dinamite jogou no Barcelona da Espanha.'},
+  ],
+  futebol:[
+    {q:'Quem é o técnico do Vasco em 2026?',o:['Ramon Menezes','Barbieri','Renato Gaúcho','Fernando Diniz'],a:2,e:'Renato Gaúcho assumiu em 03/03/2026.'},
+    {q:'Qual o resultado Vasco × Palmeiras na R5 de 2026?',o:['1×1','2×0','2×1','3×2'],a:2,e:'Vasco 2×1 Palmeiras em 12/03/2026.'},
+    {q:'Qual o resultado Vasco × Grêmio na R8 de 2026?',o:['1×0','2×0','2×1','3×1'],a:2,e:'Vasco 2×1 Grêmio em 22/03/2026.'},
+    {q:'Qual a posição do Vasco após R8 em 2026?',o:['7°','8°','9°','10°'],a:2,e:'9° lugar com 11 pontos.'},
+    {q:'Quantos pontos o Vasco tem na R8 de 2026?',o:['9','10','11','12'],a:2,e:'11 pontos — 3V 2E 3D.'},
+    {q:'Quem marcou o gol do Vasco vs Mirassol na R1?',o:['Thiago Mendes','Barros','Puma','Philippe Coutinho'],a:3,e:'Coutinho marcou o único gol na derrota por 2×1.'},
+    {q:'Por qual placar o Vasco perdeu para o Mirassol?',o:['1×0','2×0','2×1','3×1'],a:2,e:'Mirassol 2×1 Vasco em 29/01/2026.'},
+    {q:'Com quem o Vasco empatou na R2 de 2026?',o:['Santos','Bahia','Chapecoense','Botafogo'],a:2,e:'Vasco 1×1 Chapecoense em 08/02/2026.'},
+    {q:'Qual time venceu o Vasco 1×0 na R3?',o:['Palmeiras','Santos','Bahia','Fluminense'],a:2,e:'Bahia venceu 1×0 em 14/02/2026.'},
+    {q:'Qual o placar do clássico Vasco × Fluminense no BR26?',o:['2×1 V','1×1','2×1 F','3×2 V'],a:3,e:'Vasco 3×2 Fluminense em 18/03/2026.'},
+    {q:'Qual o placar do Vasco × Cruzeiro na R6?',o:['2×2','3×3','1×1','4×3'],a:1,e:'Vasco 3×3 Cruzeiro em 15/03/2026.'},
+    {q:'Quais times estão no Grupo G da Sul-Americana 2026?',o:['Boca, Olímpia, Nacional','Barracas, Audax, Olímpia','River, Colo-Colo, Peñarol','Ind., LDU, Atl. Nacional'],a:1,e:'Grupo G: Vasco, Barracas Central (ARG), Audax Italiano (CHI) e Olímpia (PAR).'},
+    {q:'Quando é o próximo jogo do Vasco após 31/03?',o:['31/03','01/04','04/04','07/04'],a:1,e:'R9: 01/04 — Coritiba × Vasco, 20h30, Couto Pereira.'},
+    {q:'Onde assistir Coritiba × Vasco (01/04)?',o:['SBT e Record','sportv e Premiere','ESPN e Star+','Band e Globo'],a:1,e:'sportv e Premiere na TV fechada; Globoplay e Premiere Play na internet.'},
+    {q:'Qual jogador está suspenso para o jogo vs Coritiba?',o:['Cuiabano','Thiago Mendes','Andres Gomez','Barros'],a:2,e:'Andres Gomez está suspenso para o jogo de 01/04.'},
+  ],
+  curiosidades:[
+    {q:'Em que cidade fica o Couto Pereira (Coritiba)?',o:['Londrina','Curitiba','Maringá','Joinville'],a:1,e:'O estádio fica em Curitiba, Paraná.'},
+    {q:'Qual camisa o Vasco usa como titular?',o:['Branca','Preta','Meia-listrada P&B','Toda preta'],a:2,e:'Listras verticais pretas e brancas.'},
+    {q:'Em qual Copa do Mundo Barbosa defendeu o Brasil?',o:['1946','1950','1954','1958'],a:1,e:'Copa de 1950, realizada no Brasil.'},
+    {q:'O Maracanã foi inaugurado para qual Copa?',o:['1946','1950','1954','1958'],a:1,e:'Inaugurado para a Copa do Mundo de 1950.'},
+    {q:'Qual plataforma transmite a Sul-Americana em streaming?',o:['Netflix','Globoplay','Disney+','Max'],a:2,e:'Disney+ (Star+) tem os direitos da Sul-Americana.'},
+    {q:'Canal aberto que transmite o Brasileirão em 2026?',o:['Record','Globo','SBT','Band'],a:1,e:'A Rede Globo tem os direitos em TV aberta.'},
+    {q:'Qual o sobrenome completo de Roberto Dinamite?',o:['Costa Silva','Fernandes Costa','Costa Fernandes','Silva Costa'],a:2,e:'Roberto Hélio Dinamite Costa Fernandes.'},
+    {q:'O Vasco estreou no Brasileirão 2026 contra quem?',o:['Coritiba','Bahia','Mirassol','Santos'],a:2,e:'Vasco vs Mirassol na R1 (29/01/2026), fora de casa.'},
+    {q:'Qual rede social oficial do Vasco tem mais seguidores?',o:['Twitter/X','Instagram','Facebook','TikTok'],a:1,e:'O Instagram @vascodagama tem mais seguidores.'},
+    {q:'Quem é monitorado por Bayer Leverkusen e Dortmund?',o:['Barros','Coutinho','Cuiabano','Puma Rodríguez'],a:2,e:'Cuiabano, lateral-direito revelado pelo Vasco.'},
+  ]
+};
+
+const ALL_Q = Object.values(QUIZ).flat();
+
+const SEED = [
+  {id:'s01',sp:'futebol',cat:'PRÉ-JOGO',title:'Vasco se prepara para Coritiba sem Andres Gomez suspenso',ex:'Renato Gaúcho define escalação com Marino no lugar do volante.',body:'<p>O Vasco faz seu último treino antes do duelo contra o Coritiba pela 9ª rodada do Brasileirão. Renato Gaúcho confirmou que Andres Gomez está suspenso e deve ser substituído por Marino.</p><p>O jogo acontece nesta quarta (01/04) às 20h30 no Couto Pereira, Curitiba. <strong>TV:</strong> sportv e Premiere. <strong>Internet:</strong> Globoplay e Premiere Play.</p><p>Cuiabano é dúvida com dor muscular. Renato disse que o time "vai jogar para vencer" e que "cada ponto vale ouro".</p>',src:'supervasco.com',srcU:'https://supervasco.com',st:'site',d:'31/03/2026',h:'08:00',fresh:1},
+  {id:'s02',sp:'futebol',cat:'NOTÍCIAS',title:'Ingressos para Vasco × Botafogo (04/04) estão ESGOTADOS',ex:'Clássico carioca na R10 não terá mais ingressos. Torcida esgotou em poucas horas.',body:'<p>Os ingressos para o clássico Vasco × Botafogo (04/04, 21h, São Januário) estão ESGOTADOS. A torcida esgotou todos os bilhetes em poucas horas após o início das vendas.</p><p>O clássico é pela 10ª rodada do Brasileirão e as duas equipes brigam pela zona sul-americana.</p>',src:'vasco.com.br',srcU:'https://vasco.com.br',st:'site',d:'31/03/2026',h:'09:15',fresh:1},
+  {id:'s03',sp:'futebol',cat:'MERCADO',title:'Cuiabano na mira de Bayer Leverkusen e Borussia Dortmund',ex:'Lateral-direito é monitorado pelo futebol alemão. Vasco não quer vender.',body:'<p>A joia vascaína Cuiabano continua chamando atenção da Europa. Bayer Leverkusen e Borussia Dortmund monitoram o lateral-direito, mas o Vasco não pretende vender durante a temporada.</p>',src:'netvasco.com.br',srcU:'https://netvasco.com.br',st:'site',d:'31/03/2026',h:'10:30',fresh:1},
+  {id:'s04',sp:'futebol',cat:'SELEÇÃO',title:'Andrey Santos e Rayan convocados para a Seleção Brasileira',ex:'Dois vascaínos reforçam o Brasil no amistoso vs Croácia em 01/04.',body:'<p>Andrey Santos e Rayan foram convocados para o Brasil no amistoso contra a Croácia em 01/04. Renato Gaúcho liberou os atletas com orgulho.</p>',src:'crvascodagama.com',srcU:'https://crvascodagama.com',st:'site',d:'31/03/2026',h:'11:00',fresh:1},
+  {id:'s05',sp:'futebol',cat:'SAF',title:'SAF: Lamacchia avança em negociações para compra do Vasco',ex:'Empresário intensifica conversas com a direção do clube.',body:'<p>Marcos Lamacchia avança nas negociações para a possível compra do Vasco da Gama. Segundo fontes próximas, as conversas estão em fase adiantada. A possível SAF divide opiniões entre os torcedores.</p>',src:'lance.com.br',srcU:'https://lance.com.br',st:'site',d:'31/03/2026',h:'12:00',fresh:0},
+  {id:'s06',sp:'basquete',cat:'NBB',title:'Basquete: Vasco × Paulistano HOJE às 20h em São Januário',ex:'Jogo importante do NBB com mando do Gigante.',body:'<p>O time de basquete do Vasco recebe o Paulistano HOJE às 20h no São Januário pelo NBB. Jogo fundamental para as pretensões do Gigante no campeonato.</p>',src:'vasco.com.br',srcU:'https://vasco.com.br',st:'site',d:'31/03/2026',h:'07:00',fresh:1},
+  {id:'s07',sp:'remo',cat:'SUL-AMERICANO',title:'Remo: 7 medalhas no Sul-Americano em Porto Alegre',ex:'Equipe de remo brilha e reafirma a tradição histórica do clube.',body:'<p>A equipe de remo do Vasco conquistou 7 medalhas no Campeonato Sul-Americano em Porto Alegre. O clube foi fundado como clube de remo antes de adotar o futebol.</p>',src:'crvascodagama.com',srcU:'https://crvascodagama.com',st:'site',d:'28/03/2026',h:'15:00',fresh:0},
+  {id:'s08',sp:'beach',cat:'COPA DO BRASIL',title:'Beach Soccer Fem.: Vasco domina Copa do Brasil com 3 prêmios',ex:'Melhor jogadora, goleira e treinadora da competição.',body:'<p>O Beach Soccer feminino do Vasco dominou a Copa do Brasil: além do título, o clube faturou melhor jogadora, melhor goleira e melhor treinadora — marca histórica.</p>',src:'vasco.com.br',srcU:'https://vasco.com.br',st:'site',d:'29/03/2026',h:'09:00',fresh:0},
+  {id:'s09',sp:'futebol',cat:'REDES SOCIAIS',title:'[@vascodagama] Vasco 2×1 Grêmio — "Gigante no G-10!"',ex:'Perfil oficial no Twitter celebra vitória na R8 do Brasileirão.',body:'<p>O perfil oficial do Vasco no Twitter (@vascodagama): "GIGANTE DA COLINA! Três pontos importantíssimos. Thiago Mendes e Nuno Moreira marcaram a vitória sobre o Grêmio por 2×1 na R8."</p>',src:'Twitter @vascodagama',srcU:'https://twitter.com/vascodagama',st:'twitter',d:'22/03/2026',h:'18:30',fresh:0},
+  {id:'s10',sp:'clube',cat:'REDES SOCIAIS',title:'[@vascodagama no Instagram] Renato: "Pensar ainda maior!"',ex:'Técnico posta vídeo motivacional no Instagram oficial do clube.',body:'<p>O Instagram oficial (@vascodagama) publicou vídeo de Renato Gaúcho: "Pensar ainda maior! Vamos, Gigante!" — o técnico está invicto desde que assumiu em 03/03.</p>',src:'Instagram @vascodagama',srcU:'https://instagram.com/vascodagama',st:'instagram',d:'30/03/2026',h:'11:00',fresh:0},
+];
+
+// ── STATE ──────────────────────────────────────────────
+let news = [...SEED], curSport = 'todos', chatOpen = false;
+let aiSecs = 600, aiTimer = null, aiCountTimer = null;
+let quizState = {};
+window._qCat = 'todos';
+
+// ── ROUTING ───────────────────────────────────────────
+function goPage(p) {
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
+  const pg = document.getElementById('page-'+p);
+  if(pg) pg.classList.add('on');
+  document.querySelectorAll('.nav-btn').forEach(x => x.classList.remove('on'));
+  const nb = document.getElementById('nav-'+p);
+  if(nb) nb.classList.add('on');
+  window.scrollTo({top:0,behavior:'smooth'});
+  if(p==='tabela') renderStd();
+  if(p==='estatisticas') renderCharts();
+  if(p==='pesquisas') renderPolls();
+}
+
+// ── CLOCK ─────────────────────────────────────────────
+function updateClock() {
+  const brt = new Date(new Date().toLocaleString('en-US',{timeZone:'America/Sao_Paulo'}));
+  const pad = n => String(n).padStart(2,'0');
+  const t = document.getElementById('clockT'), d = document.getElementById('clockD');
+  if(t) t.textContent = `${pad(brt.getHours())}:${pad(brt.getMinutes())}:${pad(brt.getSeconds())}`;
+  if(d) d.textContent = `BRT ${brt.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})}`;
+  updateCountdown(brt);
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── COUNTDOWN ─────────────────────────────────────────
+function updateCountdown(brt) {
+  const game = new Date(2026,3,1,20,30,0);
+  const diff = game - brt;
+  const el = (id) => document.getElementById(id);
+  if(diff <= 0) { ['cdH','cdM','cdS'].forEach(id => { const e=el(id); if(e) e.textContent='00'; }); return; }
+  const h = Math.floor(diff/3600000), m = Math.floor((diff%3600000)/60000), s = Math.floor((diff%60000)/1000);
+  const pad = n => String(n).padStart(2,'0');
+  if(el('cdH')) el('cdH').textContent = pad(h);
+  if(el('cdM')) el('cdM').textContent = pad(m);
+  if(el('cdS')) el('cdS').textContent = pad(s);
+}
+
+// ── AI REFRESH (10 min auto) ───────────────────────────
+function startAiTimer() {
+  aiSecs = 600;
+  if(aiCountTimer) clearInterval(aiCountTimer);
+  aiCountTimer = setInterval(() => {
+    aiSecs--;
+    const el = document.getElementById('aiCountdown');
+    if(el) { const m = String(Math.floor(aiSecs/60)).padStart(2,'0'), s = String(aiSecs%60).padStart(2,'0'); el.textContent = `${m}:${s}`; }
+    if(aiSecs <= 0) { loadNews(false); aiSecs = 600; }
+  }, 1000);
+}
+
+async function loadNews(manual=false) {
+  startAiTimer();
+  try {
+    const res = await fetch('/.netlify/functions/noticias', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({tone:'passional'})});
+    if(!res.ok) throw new Error('fn unavailable');
+    const data = await res.json();
+    if(data.news && data.news.length > 0) {
+      const fresh = data.news.filter(n => !news.find(x => x.title === n.title));
+      if(fresh.length) news = [...fresh, ...news].slice(0,50);
+    }
+  } catch(e) { /* use seed */ }
+  renderNewsGrid();
+  const meta = document.getElementById('newsMeta');
+  if(meta) meta.textContent = `${news.length} notícias · Atualizado ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`;
+}
+
+// ── NEWS GRID ─────────────────────────────────────────
+function filterSport(el, sport) {
+  curSport = sport;
+  document.querySelectorAll('.hs-tab,.sf').forEach(t => t.classList.remove('on'));
+  el.classList.add('on');
+  renderNewsGrid();
+}
+
+function getNews() { return curSport === 'todos' ? news : news.filter(n => n.sp === curSport); }
+
+const sportIcon = s => ({futebol:'⚽',basquete:'🏀',remo:'⛵',beach:'🏖',futsal:'⚽',feminino:'⚽',base:'🌿',clube:'🏟'}[s]||'⚽');
+
+function renderNewsGrid() {
+  const container = document.getElementById('newsGrid');
+  if(!container) return;
+  const list = getNews();
+  if(!list.length) { container.innerHTML = '<div style="padding:40px;text-align:center;color:var(--subtle)">Nenhuma notícia nesta categoria.</div>'; return; }
+  const [h, ...rest] = list;
+  const side = rest.slice(0,2);
+  const bot = rest.slice(2,8);
+  const more = rest.slice(8);
+
+  const srcCls = n => n.st==='twitter'?'tw':n.st==='instagram'?'ig':'';
+  const buildCard = (n, cls='') => `<div class="nc${cls?' nc-'+cls:''}" onclick="openArt('${n.id}')">
+    <div class="nc-sport">${sportIcon(n.sp)} ${n.cat}</div>
+    <div class="nc-title">${n.title}</div>
+    <div class="nc-excerpt">${n.ex}</div>
+    <div class="nc-foot">
+      <span class="nc-src ${srcCls(n)}">${n.st==='twitter'?'🐦 ':n.st==='instagram'?'📸 ':''}${n.src}</span>
+      <span class="nc-time">${n.d} · ${n.h}</span>
+    </div>
+  </div>`;
+
+  let html = `<div class="ng-featured">${buildCard(h,'hero')}`;
+  html += `<div>${side.map(n=>buildCard(n)).join('')}</div></div>`;
+  if(bot.length) html += `<div class="ng-row">${bot.map(n=>buildCard(n,'sm')).join('')}</div>`;
+  if(more.length) {
+    html += `<div style="margin-top:1px;border-top:1px solid var(--line);background:var(--ink2)">`;
+    more.forEach((n,i) => html += `<div class="nl-item" onclick="openArt('${n.id}')"><span class="nl-num">${i+9}</span><div class="nl-body"><div class="nl-title">${n.title}</div><div class="nl-meta">${n.sp} · ${n.src} · ${n.d}</div></div></div>`);
+    html += `</div>`;
+  }
+  container.innerHTML = html;
+}
+
+function openArt(id) {
+  const n = news.find(x => x.id === id);
+  if(!n) return;
+  const srcBadge = n.st==='twitter'?'<span style="background:rgba(29,161,242,.15);color:#60A5FA;padding:2px 6px;border-radius:3px;font-size:9px;font-family:var(--display);letter-spacing:1px">TWITTER/X</span>':n.st==='instagram'?'<span style="background:rgba(225,48,108,.15);color:#F9A8D4;padding:2px 6px;border-radius:3px;font-size:9px;font-family:var(--display);letter-spacing:1px">INSTAGRAM</span>':'';
+  document.getElementById('artCat').innerHTML = `<span style="background:var(--goldfade);color:var(--gold2);padding:3px 8px;border-radius:3px;font-family:var(--display);font-size:9.5px;letter-spacing:2px;text-transform:uppercase">${n.sp.toUpperCase()}</span><span style="background:var(--ink4);color:var(--muted);padding:3px 8px;border-radius:3px;font-family:var(--display);font-size:9.5px;letter-spacing:2px">${n.cat}</span>${srcBadge}`;
+  document.getElementById('artTitle').textContent = n.title;
+  document.getElementById('artMeta').innerHTML = `<span>${n.d}</span><span>·</span><span>${n.h}</span><span>·</span><span class="${n.st!=='site'?'nc-src '+srcCls(n):''}">${n.src}</span>`;
+  document.getElementById('artBody').innerHTML = n.body;
+  document.getElementById('artSrc').innerHTML = `Fonte: <a href="${n.srcU}" target="_blank" rel="noopener">${n.src}</a> — Fan site não oficial. Conteúdo gerado com Claude AI.`;
+  document.getElementById('artOv').classList.add('open');
+}
+const srcCls = n => n.st==='twitter'?'tw':n.st==='instagram'?'ig':'';
+function closeArt() { document.getElementById('artOv').classList.remove('open'); }
+
+// ── STANDINGS ─────────────────────────────────────────
+function renderStd() {
+  const tb = document.getElementById('stdBody');
+  if(!tb) return;
+  tb.innerHTML = STD.map(t => {
+    const dot = t.lib?'plib':t.sul?'psul':t.reb?'preb':'';
+    const fd = (t.form||[]).map(r => `<div class="fd ${r==='W'?'fdw':r==='D'?'fdd':'fdl'}">${r==='W'?'V':r==='D'?'E':'D'}</div>`).join('');
+    return `<tr${t.vasco?' class="vr"':''}>
+      <td><span class="pos-num">${dot?`<span class="pos-dot ${dot}"></span>`:''}${t.p}</span></td>
+      <td><div class="team-cell"><div class="team-ico${t.vasco?' vico':''}">${t.ab}</div><span class="team-name${t.vasco?' vname':''}">${t.t}</span></div></td>
+      <td>${t.pj}</td><td>${t.v}</td><td>${t.e}</td><td>${t.d}</td>
+      <td>${t.sg>0?'+'+t.sg:t.sg}</td>
+      <td><span class="pts-cell">${t.pts}</span></td>
+      <td><div class="form-dots">${fd}</div></td>
+    </tr>`;
+  }).join('');
+}
+
+// ── CHARTS ────────────────────────────────────────────
+let chartsInit = false;
+function renderCharts() {
+  if(chartsInit) return; chartsInit = true;
+  const opt = (extra={}) => ({responsive:true,maintainAspectRatio:false,plugins:{legend:{labels:{color:'#9B9790',font:{size:9}}}},scales:{x:{ticks:{color:'#9B9790',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},y:{ticks:{color:'#9B9790',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}}}, ...extra});
+  const c = id => document.getElementById(id);
+  if(c('chartPos')) new Chart(c('chartPos'),{type:'line',data:{labels:['74','89','97','00','05','09','14','18','21','24','25'],datasets:[{label:'Posição',data:[1,1,1,1,16,17,6,5,4,8,10],borderColor:'#C8A84B',backgroundColor:'rgba(200,168,75,.08)',pointBackgroundColor:'#E4C76B',tension:.35,fill:true,borderWidth:2,pointRadius:4}]},options:{...opt(),scales:{y:{reverse:true,min:1,max:20,ticks:{color:'#9B9790',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}},x:{ticks:{color:'#9B9790',font:{size:9}},grid:{color:'rgba(255,255,255,.04)'}}},plugins:{legend:{display:false}}}});
+  if(c('chartTit')) new Chart(c('chartTit'),{type:'doughnut',data:{labels:['Carioca','Brasileirão','Libertadores','Copa do Brasil','Outros'],datasets:[{data:[24,4,1,1,3],backgroundColor:['#C8A84B','#E4C76B','#7A611A','rgba(200,168,75,.4)','rgba(255,255,255,.08)'],borderColor:'transparent'}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'bottom',labels:{color:'#9B9790',font:{size:9},padding:8}}}}});
+}
+
+// ── POLLS ─────────────────────────────────────────────
+function renderPolls() {
+  const g = document.getElementById('pollsGrid');
+  const cg = document.getElementById('closedPollsGrid');
+  if(g) g.innerHTML = POLLS.map(p => buildPoll(p, false)).join('');
+  if(cg) cg.innerHTML = CLOSED_POLLS.map(p => buildPoll(p, true)).join('');
+}
+function buildPoll(p, closed) {
+  const saved = getPD(p.id) || (closed ? {votes: p.votes||new Array(p.opts.length).fill(0), myVote:0} : null);
+  const voted = saved && saved.myVote !== undefined;
+  const total = voted ? saved.votes.reduce((a,b)=>a+b,0) : 0;
+  const wi = voted ? saved.votes.indexOf(Math.max(...saved.votes)) : -1;
+  const opts = p.opts.map((o,i) => {
+    const pct = total > 0 ? Math.round(saved.votes[i]/total*100) : 0;
+    return `<button class="poll-opt${voted?' winner':''}${wi===i&&voted?' winner':''}" ${voted||closed?'disabled':''} onclick="votePoll('${p.id}',${i})">
+      ${voted||closed?`<div class="poll-bar-bg" style="width:${pct}%"></div>`:''}
+      <div class="poll-opt-row"><span>${saved&&saved.myVote===i?'▶ ':''}${o}</span>${voted||closed?`<span class="poll-pct">${pct}%</span>`:''}</div>
+    </button>`;
+  }).join('');
+  const newsNote = voted ? `<div class="poll-news show"><strong>📊 Resultado:</strong> ${total} votos registrados. Publicado como notícia na quarta e domingo.</div>` : '';
+  return `<div class="poll-card">
+    <div class="poll-head"><span class="poll-label">Semana ${p.w}</span><span class="poll-status">${closed?'Encerrada':'Aberta'}</span></div>
+    <div class="poll-body">
+      <div class="poll-q">${p.q}</div>
+      <div class="poll-opts">${opts}</div>
+      ${voted?`<div class="poll-foot"><span>${total} votos</span>${closed&&p.result?`<span style="color:var(--gold2);font-size:9.5px">${p.result}</span>`:''}</div>`:''}
+      ${newsNote}
+    </div>
+  </div>`;
+}
+function votePoll(id, idx) {
+  const p = POLLS.find(x => x.id === id);
+  if(!p) return;
+  let d = getPD(id) || {votes: new Array(p.opts.length).fill(0)};
+  if(d.myVote !== undefined) return;
+  d.votes[idx]++; d.myVote = idx;
+  savePD(id, d);
+  renderPolls();
+  // Publica como notícia
+  const total = d.votes.reduce((a,b)=>a+b,0);
+  const wi = d.votes.indexOf(Math.max(...d.votes));
+  const pct = Math.round(d.votes[wi]/total*100);
+  news.unshift({id:'poll_'+Date.now(),sp:'clube',cat:'PESQUISA',title:`📊 Pesquisa: "${p.opts[wi]}" lidera com ${pct}% dos votos`,ex:`Resultado da pesquisa: "${p.q}" — ${total} votos.`,body:`<p><strong>${p.q}</strong></p><p>${p.opts.map((o,i)=>`${o}: ${Math.round(d.votes[i]/total*100)}%`).join(' · ')}</p><p>${total} votos. Resultado final no domingo.</p>`,src:'IA Vasco News',srcU:'#',st:'site',d:new Date().toLocaleDateString('pt-BR'),h:new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}),fresh:1});
+  renderNewsGrid();
+}
+const getPD = id => { try { const d=localStorage.getItem('vp_'+id); return d?JSON.parse(d):null; } catch(e){return null;} };
+const savePD = (id,d) => { try { localStorage.setItem('vp_'+id, JSON.stringify(d)); } catch(e){} };
+
+// ── NEWSLETTER ────────────────────────────────────────
+async function submitNl() {
+  const name = document.getElementById('nlName').value.trim();
+  const email = document.getElementById('nlEmail').value.trim();
+  const msg = document.getElementById('nlMsg');
+  if(!name||!email) { msg.className='nl-msg err'; msg.textContent='Preencha nome e e-mail.'; return; }
+  if(!email.includes('@')) { msg.className='nl-msg err'; msg.textContent='E-mail inválido.'; return; }
+  msg.className=''; msg.style.display='block'; msg.textContent='⏳ Cadastrando...';
+  await new Promise(r=>setTimeout(r,900));
+  msg.className='nl-msg ok'; msg.textContent=`✅ ${name}, cadastro realizado! Boletim todo dia às 8h.`;
+  const c = document.getElementById('nlCount');
+  if(c) c.textContent = String(parseInt(c.textContent||'247')+1);
+  document.getElementById('nlName').value = '';
+  document.getElementById('nlEmail').value = '';
+}
+
+// ── BULLETIN ──────────────────────────────────────────
+async function showBul() {
+  document.getElementById('bulOv').classList.add('open');
+  const d = document.getElementById('bulDate');
+  if(d) d.textContent = new Date().toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'long'});
+  const body = document.getElementById('bulBody');
+  try {
+    const res = await fetch('/.netlify/functions/boletim');
+    if(!res.ok) throw new Error();
+    const data = await res.json();
+    body.innerHTML = data.bulletin || staticBul();
+  } catch(e) { body.innerHTML = staticBul(); }
+}
+function closeBul() { document.getElementById('bulOv').classList.remove('open'); }
+function staticBul() {
+  return `<div class="bul-sec"><div class="bul-sec-title">⚽ Próximo Jogo</div><div class="bul-content"><strong>Coritiba × Vasco</strong> — 01/04 às 20h30<br>Couto Pereira · Curitiba · R9 Brasileirão<br>TV: sportv, Premiere · Internet: Globoplay<br><strong style="color:#FCA5A5">⚠ Andres Gomez SUSPENSO · Cuiabano em dúvida</strong></div></div>
+  <div class="bul-sec"><div class="bul-sec-title">📰 Destaques</div><div class="bul-content">🏀 Basquete: Vasco × Paulistano — 20h — NBB<br>⛵ Remo: 7 medalhas no Sul-Americano<br>💰 SAF: Lamacchia avança nas negociações</div></div>
+  <div class="bul-sec"><div class="bul-sec-title">📊 Pesquisa da Semana</div><div class="bul-content">Vote na página de Pesquisas — resultado imediato!</div></div>`;
+}
+
+// ── IDOL MODAL ────────────────────────────────────────
+function openIdol(name, era, statsStr, bio, idx) {
+  document.getElementById('idolOv').classList.add('open');
+  document.getElementById('idolName').textContent = name;
+  document.getElementById('idolEra').textContent = era;
+  const stats = statsStr.split('|').map(s => s.split('~'));
+  document.getElementById('idolStats').innerHTML = stats.map(([v,l]) => `<div class="istat"><span class="istat-v">${v}</span><span class="istat-l">${l}</span></div>`).join('');
+  document.getElementById('idolBio').textContent = bio;
+  const colors = [['#0E0E14','#1C1A24'],['#0E0E14','#1A1820'],['#0E0E14','#1A1822'],['#0E0E14','#1A1826'],['#0E0E14','#18192A'],['#0E0E14','#1A1A26'],['#0E0E14','#181820'],['#0E0E14','#1A1A28'],['#0E0E14','#1A1828'],['#0E0E14','#18181E'],['#0E0E14','#1C1C24'],['#0E0E14','#1A1A28']];
+  const c = colors[idx%colors.length];
+  document.getElementById('idolArt').innerHTML = `<svg viewBox="0 0 560 180" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%"><defs><linearGradient id="im${idx}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c[0]}"/><stop offset="100%" stop-color="${c[1]}"/></linearGradient></defs><rect width="560" height="180" fill="url(#im${idx})"/><text x="280" y="110" font-family="Bebas Neue,sans-serif" font-size="100" fill="rgba(200,168,75,0.05)" text-anchor="middle" letter-spacing="8">VASCO</text></svg>`;
+}
+function closeIdol() { document.getElementById('idolOv').classList.remove('open'); }
+
+// ── QUIZ ──────────────────────────────────────────────
+function startQuiz(cat) {
+  window._qCat = cat;
+  let qs = cat==='todos' ? [...ALL_Q] : [...(QUIZ[cat]||ALL_Q)];
+  qs = qs.sort(()=>Math.random()-.5).slice(0,20);
+  quizState = {qs, i:0, score:0, timer:null, cat};
+  document.getElementById('qHome').style.display='none';
+  document.getElementById('qResult').style.display='none';
+  document.getElementById('qGame').style.display='block';
+  showQ();
+}
+function showQ() {
+  const q = quizState.qs[quizState.i];
+  if(!q) { endQuiz(); return; }
+  const pct = (quizState.i/quizState.qs.length)*100;
+  document.getElementById('qProg').style.width = pct+'%';
+  document.getElementById('qNum').textContent = `${quizState.i+1}/${quizState.qs.length}`;
+  document.getElementById('qScoreD').textContent = `${quizState.score} pts`;
+  document.getElementById('qCatTag').textContent = (window._qCat||'').toUpperCase();
+  document.getElementById('qTxt').textContent = q.q;
+  const opts = document.getElementById('qOpts');
+  opts.innerHTML = q.o.map((o,i) => `<button class="q-opt" onclick="answerQ(${i})" id="qo${i}"><span class="q-letter">${String.fromCharCode(65+i)}</span>${o}</button>`).join('');
+  document.getElementById('qFb').className='q-fb';
+  document.getElementById('qNextBtn').className='q-next';
+  let t = 20;
+  const tel = document.getElementById('qTimer');
+  if(quizState.timer) clearInterval(quizState.timer);
+  quizState.timer = setInterval(()=>{
+    t--; if(tel){tel.textContent=`⏱ ${t}`;if(t<=5)tel.className='q-timer warn';}
+    if(t<=0){clearInterval(quizState.timer);timeoutQ();}
+  },1000);
+}
+function timeoutQ() {
+  const q = quizState.qs[quizState.i];
+  document.querySelectorAll('.q-opt').forEach((b,i)=>{b.disabled=true;if(i===q.a)b.className='q-opt correct';});
+  const fb = document.getElementById('qFb');
+  fb.className='q-fb nok show'; fb.innerHTML=`⏱ Tempo! Certo: <strong>${q.o[q.a]}</strong>${q.e?` — ${q.e}`:''}`;
+  document.getElementById('qNextBtn').className='q-next show';
+}
+function answerQ(idx) {
+  if(quizState.timer) clearInterval(quizState.timer);
+  const q = quizState.qs[quizState.i];
+  document.querySelectorAll('.q-opt').forEach(b=>b.disabled=true);
+  const ok = idx===q.a;
+  document.querySelectorAll('.q-opt').forEach((b,i)=>{if(i===q.a)b.className='q-opt correct';else if(i===idx&&!ok)b.className='q-opt wrong';});
+  if(ok) quizState.score+=10;
+  const fb = document.getElementById('qFb');
+  fb.className=`q-fb ${ok?'ok':'nok'} show`;
+  fb.innerHTML=ok?`✅ Correto! +10${q.e?` — <em>${q.e}</em>`:''}`: `❌ Errou. Certo: <strong>${q.o[q.a]}</strong>${q.e?` — <em>${q.e}</em>`:''}`;
+  document.getElementById('qNextBtn').className='q-next show';
+}
+function nextQ() { quizState.i++; if(quizState.i>=quizState.qs.length){endQuiz();return;} showQ(); }
+function endQuiz() {
+  if(quizState.timer) clearInterval(quizState.timer);
+  document.getElementById('qGame').style.display='none';
+  document.getElementById('qResult').style.display='block';
+  const pct = Math.round(quizState.score/(quizState.qs.length*10)*100);
+  document.getElementById('qrScore').textContent = quizState.score+' pts';
+  document.getElementById('qrTotal').textContent = `${quizState.score/10} de ${quizState.qs.length} corretas (${pct}%)`;
+  document.getElementById('qrGrade').textContent = pct>=90?'🏆 Lenda Vascaína!':pct>=70?'⭐ Grande Torcedor!':pct>=50?'👍 Boa Tentativa!':'🤔 Estude mais!';
+  const fill = document.getElementById('qrFill');
+  fill.style.background = pct>=70?'linear-gradient(90deg,var(--gold),var(--gold2))':'linear-gradient(90deg,#F87171,#FCD34D)';
+  setTimeout(()=>fill.style.width=pct+'%',100);
+}
+function showQHome() { document.getElementById('qResult').style.display='none'; document.getElementById('qHome').style.display='block'; }
+
+// ── CHATBOT ───────────────────────────────────────────
+const KB = {
+  'próximo jogo':'Coritiba × Vasco — HOJE 01/04 às 20h30, Couto Pereira, Curitiba. TV: sportv e Premiere. Internet: Globoplay e Premiere Play. Andres Gomez suspenso.',
+  'proximo jogo':'Coritiba × Vasco — HOJE 01/04 às 20h30. TV: sportv e Premiere. Andres Gomez suspenso.',
+  'tabela':'Vasco está em 9° no Brasileirão com 11 pontos — 3V 2E 3D em 8 jogos.',
+  'resultado':'Último resultado: Vasco 2×1 Grêmio (R8, 22/03). Antes: 3×2 Fluminense e 3×3 Cruzeiro.',
+  'artilheiro':'5 artilheiros empatados com 3 gols: Thiago Mendes, Barros, Puma Rodríguez, Spinelli e Ph. Coutinho.',
+  'basquete':'Basquete: Vasco × Paulistano HOJE às 20h em São Januário — NBB!',
+  'libertadores':'Vasco conquistou a Libertadores em 1998, vencendo o Barcelona de Guayaquil por 4×1 no agregado.',
+  'história':'Fundado em 1898. Pioneiro em 1923. 4 Brasileiros (1974, 89, 97, 2000). Libertadores 1998.',
+  'historia':'Fundado em 1898. 4 Brasileiros, 1 Libertadores, 1 Copa do Brasil, 24+ Cariocas.',
+  'técnico':'Renato Gaúcho desde 03/03/2026 — 3ª passagem. Invicto até agora!',
+  'tecnico':'Renato Gaúcho desde 03/03/2026. Invicto!',
+  'sul-americana':'Grupo G com Barracas Central (ARG), Audax Italiano (CHI) e Olímpia (PAR). Estreia 07/04 em Buenos Aires.',
+  'títulos':'4 Brasileiros, 1 Libertadores, 1 Copa do Brasil, 1 Copa Mercosul, 24+ Cariocas.',
+  'titulos':'4 Brasileiros, 1 Libertadores, 1 Copa do Brasil, 24+ Cariocas.',
+  'botafogo':'Vasco × Botafogo em 04/04 às 21h em São Januário — INGRESSOS ESGOTADOS!',
+  'cuiabano':'Cuiabano é monitorado por Bayer Leverkusen e Borussia Dortmund. Dúvida para hoje.',
+  'remo':'Remo: 7 medalhas no Sul-Americano em Porto Alegre!',
+  'saf':'Marcos Lamacchia em negociações avançadas para possível compra do Vasco.',
+};
+function toggleChat() { chatOpen=!chatOpen; document.getElementById('chatPanel').classList.toggle('open',chatOpen); if(chatOpen){ const b=document.querySelector('.chat-badge'); if(b)b.style.display='none'; } }
+function sendSugg(el) { document.getElementById('chatInp').value=el.textContent; sendChat(); }
+async function sendChat() {
+  const inp=document.getElementById('chatInp'), txt=inp.value.trim();
+  if(!txt) return; inp.value='';
+  addMsg(txt,'usr');
+  const ty=document.getElementById('chatTyping'); ty.classList.add('show');
+  await new Promise(r=>setTimeout(r,700+Math.random()*500));
+  ty.classList.remove('show');
+  addMsg(getReply(txt),'bot');
+}
+function getReply(txt) {
+  const t = txt.toLowerCase();
+  for(const [k,v] of Object.entries(KB)) { if(t.includes(k)) return v; }
+  if(t.match(/oi|olá|ola|tudo/)) return '⚓ Olá, Gigante! Posso ajudar com jogos, tabela, artilheiros, história, títulos, quiz, remo e basquete!';
+  if(t.match(/renato|gauch/)) return 'Renato Gaúcho está no Vasco desde 03/03/2026. Invicto — 3V 1E em 4 jogos como técnico!';
+  if(t.match(/gol|placar/)) return 'Último placar: Vasco 2×1 Grêmio (R8). Próximo: Coritiba × Vasco HOJE 20h30.';
+  return `Sobre "${txt}" 🤔 Posso ajudar com próximo jogo, tabela, artilheiros, história, títulos, basquete, remo, Sul-Americana... O que quiser saber do Gigante! ⚓`;
+}
+function addMsg(txt, type) {
+  const msgs=document.getElementById('chatMsgs'), ty=document.getElementById('chatTyping');
+  const el=document.createElement('div'); el.className='ch-msg '+type;
+  const now=new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+  el.innerHTML=`<div class="ch-bubble">${txt}</div><div class="ch-ts">${now}</div>`;
+  msgs.insertBefore(el, ty); msgs.scrollTop=msgs.scrollHeight;
+}
+document.getElementById('chatInp').addEventListener('keypress', e=>{ if(e.key==='Enter') sendChat(); });
+
+// ── INIT ──────────────────────────────────────────────
+document.addEventListener('DOMContentLoaded', () => {
+  renderStd();
+  loadNews(false);
+  renderPolls();
+});
+document.addEventListener('keydown', e => {
+  if(e.key==='Escape'){ closeArt(); closeIdol(); closeBul(); if(chatOpen)toggleChat(); }
+});
+</script>
+
+<!-- Netlify Identity -->
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if(window.netlifyIdentity){window.netlifyIdentity.on("init",u=>{if(!u)window.netlifyIdentity.on("login",()=>{document.location.href="/admin/";});})}
+</script>
+</body>
+</html>
